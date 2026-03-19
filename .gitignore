@@ -4,6 +4,7 @@
 .env.backup
 .env.production
 .phpactor.json
+.phpstorm.meta.php
 .phpunit.result.cache
 /.fleet
 /.idea
@@ -19,6 +20,8 @@
 /storage/*.key
 /storage/pail
 /vendor
+_ide_helper.php
+_ide_helper_models.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
