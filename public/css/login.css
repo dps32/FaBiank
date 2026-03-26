@@ -1,4 +1,5 @@
-.login-container {
+.login-container,
+.register-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,14 +13,17 @@
     border: 1px solid #ffffff7a;
 }
 
-.login-container input {
+.login-container input,
+.register-container input {
     width: 100%;
 }
 
-.login-container p {
+.login-container p,
+.register-container p {
     color: #353535;
 }
 
-#loginButton {
+#loginButton,
+#registerButton {
     margin-top: 20px;
 }

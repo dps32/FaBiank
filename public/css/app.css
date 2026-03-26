@@ -50,6 +50,7 @@ h1 {
 }
 
 input[type="text"],
+input[type="tel"],
 input[type="password"] {
     all: unset;
     background-color: rgba(255, 255, 255, 0.2);
@@ -64,6 +65,7 @@ button {
     border: 1px solid #ffffff52;
     color: #313131;
     border-radius: 999px;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
