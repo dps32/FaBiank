@@ -26,6 +26,10 @@
     box-sizing: border-box !important;
 }
 
+html  {
+    background-color: #a6a6a6;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -34,9 +38,10 @@ body {
     min-height: 100vh;
     font-family: 'Montserrat', Arial, Helvetica, sans-serif;
     background:
-    radial-gradient(960px 460px at 12% -8%, rgba(255, 255, 255, 0.96), transparent 70%),
-    radial-gradient(800px 390px at 86% 6%, rgba(255, 255, 255, 0.72), transparent 72%),
-    linear-gradient(160deg, #eef5ff, #d9e8ff);
+              radial-gradient(circle at 14% 20%, rgba(70, 150, 255, 0.8), transparent 46%),
+              radial-gradient(circle at 86% 18%, rgba(80, 220, 190, 0.8), transparent 44%),
+              radial-gradient(circle at 78% 84%, rgba(255, 150, 210, 0.8), transparent 42%),
+              linear-gradient(150deg, #ebebeb 0%, #c6c6c6 52%, #b7b7b7 100%);
     overflow-x: hidden;
 }
 
@@ -47,20 +52,54 @@ h1 {
 input[type="text"],
 input[type="password"] {
     all: unset;
-    background-color: #3e3f43;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid #ffffff52;
     border-radius: 999px;
     padding: 6px 12px;
-    color: white;
+    color: rgb(0, 0, 0);
 }
 
 button {
-    background-color: gray;
-    border: none;
-    color: white;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 1px solid #ffffff52;
+    color: #313131;
     border-radius: 999px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 20px;
+    padding: 10px 20px;
     width: 100%;
+    cursor: pointer;
+}
+
+.content a {
+    all: unset;
+    cursor: pointer;
+    color: #3445ff;
+    transition: 0.2s ease;
+}
+
+.content a:hover {
+    color: #5563ff;
+}
+
+.input-container {
+    position: relative;
+    width: 100%;
+}
+
+.input-container .placeholder {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: transparent;
+    font-weight: 400;
+    pointer-events: none;
+    transition: 0.3s ease;
+}
+
+.input-container:has(input:placeholder-shown) .placeholder {
+    transform: translateY(-50%);
+    color: rgba(0, 0, 0, 0.4);
 }

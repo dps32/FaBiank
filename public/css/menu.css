@@ -6,11 +6,38 @@
     gap: 5px;
     margin: 18px 24px 10px;
     padding: 5px;
-    width: min(560px, 88vw);
+    width: fit-content;
+    max-width: 88vw;
     border-radius: 999px;
-    background: rgba(0, 0, 0, 0.1);
+    isolation: isolate;
+}
+
+.menu::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    z-index: 0;
     backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid #ffffff7a;
     box-shadow: 0 10px 24px 0 rgba(0, 0, 0, 0.2);
+    transform: scaleX(1);
+    will-change: transform;
+    transition: 0.4s ease;
+}
+
+.menu:has(.menu-link:hover)::before {
+    transform: scaleX(1.1);
+}
+
+.menu.block::before,
+.menu.block:has(.menu-link:hover)::before {
+    transform: scaleX(1);
+}
+
+.menu.block .menu-link.is-active {
+    transform: none !important;
 }
 
 .menu-link {
@@ -26,6 +53,7 @@
     color: rgba(0, 0, 0, 1);
     font-size: 13px;
     font-weight: 500;
+    z-index: 1;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.05);
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.18);

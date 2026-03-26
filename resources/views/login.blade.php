@@ -19,8 +19,16 @@
         <h1>Iniciar sesión</h1>
         
         <div class="login-container">
-            <input type="text" name="" id="username" placeholder="Usuario">
-            <input type="password" name="" id="password" placeholder="Contraseña">
+            <div class="input-container">
+                <input type="text" name="" id="username" placeholder=" ">
+                <span class="placeholder">Usuario</span>
+            </div>
+            <div class="input-container">
+                <input type="password" name="" id="password" placeholder=" ">
+                <span class="placeholder">Contraseña</span>
+            </div>
+
+
             <button id="loginButton">Iniciar Sesión</button>
             <p>¿No tienes cuenta? <a href="{{ route("register") }}">Registrarse</a></p>
         </div>

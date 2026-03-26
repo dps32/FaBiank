@@ -15,9 +15,6 @@ document.querySelectorAll('.menu-link').forEach(link => {
         const menu = document.querySelector('.menu');
         menu.classList.add('block');
 
-        setTimeout(() => {
-            link.blur(); // desfocusear para quitar el hover
-        }, 10);
 
         setTimeout(() => {
             window.location.href = href; // navegar
@@ -26,6 +23,6 @@ document.querySelectorAll('.menu-link').forEach(link => {
         // por si se vuelve a la página desbloqueamos el menú
         setTimeout(() => {
             menu.classList.remove('block');
-        }, 400);
+        }, 800);
     });
 });
