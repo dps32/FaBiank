@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Login</title>
     <link rel="icon" href="{{ asset('favicon.ico') }}">
     <link rel="preload" href="{{ asset('fonts/montserrat-400.woff2') }}" as="font" type="font/woff2" crossorigin>
@@ -20,18 +21,19 @@
         
         <div class="login-container">
             <div class="input-container">
-                <input type="text" name="" id="username" placeholder=" ">
+                <input type="text" name="username" id="username" placeholder=" ">
                 <span class="placeholder">Usuario</span>
             </div>
             <div class="input-container">
-                <input type="password" name="" id="password" placeholder=" ">
+                <input type="password" name="password" id="password" placeholder=" ">
                 <span class="placeholder">Contraseña</span>
             </div>
 
 
-            <button id="loginButton">Iniciar Sesión</button>
+            <button id="loginButton" data-login-url="{{ route('login.store') }}" data-dashboard-url="{{ route('dashboard') }}">Iniciar Sesión</button>
             <p>¿No tienes cuenta? <a href="{{ route("register") }}">Registrarse</a></p>
         </div>
     </div>
+    <script src="{{ asset('js/login.js') }}" defer></script>
 </body>
 </html>
