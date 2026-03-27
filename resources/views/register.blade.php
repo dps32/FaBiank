@@ -17,13 +17,25 @@
     <x-menu />
     
     <div class="content">
-        <h1>Registrar cuenta</h1>
+        <h1>Registrarse</h1>
 
         <div class="register-container">
-            <input type="text" name="username" id="username" placeholder="Usuario">
-            <input type="tel" name="phone_number" id="phone_number" placeholder="Número de teléfono" maxlength="9" inputmode="numeric">
-            <input type="password" name="password" id="password" placeholder="Contraseña">
-            <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Confirmar contraseña">
+            <div class="input-container">
+                <input type="text" name="username" id="username" placeholder=" ">
+                <span class="placeholder">Usuario</span>
+            </div>
+            <div class="input-container">
+                <input type="tel" name="phone_number" id="phone_number" placeholder=" " maxlength="9" inputmode="numeric">
+                <span class="placeholder">Número de teléfono</span>
+            </div>
+            <div class="input-container">
+                <input type="password" name="password" id="password" placeholder=" ">
+                <span class="placeholder">Contraseña</span>
+            </div>
+            <div class="input-container">
+                <input type="password" name="password_confirmation" id="password_confirmation" placeholder=" ">
+                <span class="placeholder">Confirmar contraseña</span>
+            </div>
 
             <button id="registerButton" type="button" data-register-url="{{ route('register.store') }}" data-login-url="{{ route('login') }}">Registrarse</button>
             <p>¿Ya tienes cuenta? <a href="{{ route("login") }}">Iniciar Sesión</a></p>
