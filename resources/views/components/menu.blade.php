@@ -1,13 +1,27 @@
 @php
     $items = [];
+    $user = auth()->user();
 
-    if (auth()->check()) { // el auth check supongo que servirá para comprobar que el usuario esté logueado
+    if ($user) {
         $items[] = [
             'label' => 'Panel',
             'href' => route('dashboard'),
             'active' => request()->routeIs('dashboard'),
         ];
 
+        if ($user->is_verified) {
+            $items[] = [
+                'label' => 'Historial',
+                'href' => route('history'),
+                'active' => request()->routeIs('history'),
+            ];
+
+            $items[] = [
+                'label' => 'Invesiones',
+                'href' => route('investments'),
+                'active' => request()->routeIs('investments'),
+            ];
+        }
     } else {
         $items[] = [
             'label' => 'Inicio de sesión',

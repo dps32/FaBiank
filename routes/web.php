@@ -14,6 +14,12 @@ Route::get('/', function () {
     return redirect('/login');
 })->name('home');
 
+// Register
+Route::get('/register', function () {
+    return view('register');
+})->name('register');
+
+Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
 // Login
 Route::get('/login', function () {
@@ -22,18 +28,24 @@ Route::get('/login', function () {
 
 Route::post('/login', [LoginController::class, 'store'])->name('login.store');
 
+// Logout
+Route::post('/logout', [LoginController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('logout');
 
-// Register
-Route::get('/register', function () {
-    return view('register');
-})->name('register');
-
-Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
-
+// Dashboard
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware('auth')->name('dashboard');
 
-Route::post('/logout', [LoginController::class, 'destroy'])
-    ->middleware('auth')
-    ->name('logout');
+// History
+Route::get('/history', function(){
+    return view('history');
+})->middleware('auth')->name('history');
+
+// Investments
+Route::get('/investments', function(){
+    return view('investments');
+})->middleware('auth')->name('investments');
+
+

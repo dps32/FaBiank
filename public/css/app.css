@@ -72,6 +72,10 @@ button {
     padding: 10px 20px;
     width: 100%;
     cursor: pointer;
+    transition: 0.2s ease;
+}
+button:hover {
+    transform: translateY(-2px);
 }
 
 .content a {
