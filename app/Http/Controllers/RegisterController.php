@@ -25,8 +25,7 @@ class RegisterController extends Controller
             'phone_number'=>$validated['phone_number'],
             'password'=>$validated['password'],
             'balance'=>0,
-            'is_verified'=>false,
-            'sms_code'=>null,
+            'two_factor_secret'=>null,
         ]);
 
         if ($request->expectsJson()) {

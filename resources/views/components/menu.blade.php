@@ -9,19 +9,17 @@
             'active' => request()->routeIs('dashboard'),
         ];
 
-        if ($user->is_verified) {
-            $items[] = [
-                'label' => 'Historial',
-                'href' => route('history'),
-                'active' => request()->routeIs('history'),
-            ];
+        $items[] = [
+            'label' => 'Historial',
+            'href' => route('history'),
+            'active' => request()->routeIs('history'),
+        ];
 
-            $items[] = [
-                'label' => 'Invesiones',
-                'href' => route('investments'),
-                'active' => request()->routeIs('investments'),
-            ];
-        }
+        $items[] = [
+            'label' => 'Inversiones',
+            'href' => route('investments'),
+            'active' => request()->routeIs('investments'),
+        ];
     } else {
         $items[] = [
             'label' => 'Inicio de sesión',
@@ -49,4 +47,4 @@
 </nav>
 
 
-<script src="{{ asset('js/menu.js') }}"></script>
+<script src="{{ asset('js/menu.js') }}" defer></script>

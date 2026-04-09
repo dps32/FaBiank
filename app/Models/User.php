@@ -23,8 +23,7 @@ class User extends Authenticatable
         'username',
         'password',
         'phone_number',
-        'is_verified',
-        'sms_code',
+        'two_factor_secret',
     ];
 
     // Esto se oculta cuando devuelves el user.
@@ -37,7 +36,6 @@ class User extends Authenticatable
     {
         return [
             'balance' => 'decimal:2',
-            'is_verified' => 'boolean',
             'password' => 'hashed',
         ];
     }

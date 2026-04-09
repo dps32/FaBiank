@@ -15,8 +15,7 @@ class UserService
             'username' => ['required', 'string', 'max:255', 'unique:users,username'],
             'password' => ['required', 'string', 'min:6', 'max:255'],
             'phone_number' => ['required', 'string', 'max:255'],
-            'is_verified' => ['sometimes', 'boolean'],
-            'sms_code' => ['nullable', 'string', 'max:255'],
+            'two_factor_secret' => ['nullable', 'string', 'max:255'],
         ])->validate();
 
         return User::create($validated);
@@ -28,16 +27,14 @@ class UserService
         string $password,
         string $phoneNumber,
         float $balance = 0,
-        bool $isVerified = false,
-        ?string $smsCode = null
+        ?string $twoFactorSecret = null
     ): User {
         return $this->create([
             'balance' => $balance,
             'username' => $username,
             'password' => $password,
             'phone_number' => $phoneNumber,
-            'is_verified' => $isVerified,
-            'sms_code' => $smsCode,
+            'two_factor_secret' => $twoFactorSecret,
         ]);
     }
 

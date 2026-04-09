@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Auth;
@@ -34,9 +35,9 @@ Route::post('/logout', [LoginController::class, 'destroy'])
     ->name('logout');
 
 // Dashboard
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth')->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'show'])
+    ->middleware('auth')
+    ->name('dashboard');
 
 // History
 Route::get('/history', function(){
