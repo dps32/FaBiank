@@ -29,10 +29,6 @@
                 <span class="placeholder">Nombre de usuario</span>
             </div>
             <div class="input-container">
-                <input type="tel" name="phone_number" id="phone_number" placeholder=" " maxlength="9" inputmode="numeric">
-                <span class="placeholder">Número de teléfono</span>
-            </div>
-            <div class="input-container">
                 <input type="password" name="password" id="password" placeholder=" ">
                 <span class="placeholder">Contraseña</span>
             </div>

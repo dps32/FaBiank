@@ -47,7 +47,6 @@
                 <div class="search-result-info">
                     <p class="search-result-name">${escapeHtml(user.name || user.username)}</p>
                     <p class="search-result-phone">@${escapeHtml(user.username)}</p>
-                    <p class="search-result-phone">${escapeHtml(user.phone_number)}</p>
                 </div>
                 <button type="button" class="search-result-action" data-user-id="${user.id}">
                     Enviar →

@@ -15,7 +15,6 @@ class UserService
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:users,username'],
             'password' => ['required', 'string', 'min:6', 'max:255'],
-            'phone_number' => ['required', 'string', 'max:255'],
             'two_factor_secret' => ['nullable', 'string', 'max:255'],
         ])->validate();
 
@@ -27,7 +26,6 @@ class UserService
         string $name,
         string $username,
         string $password,
-        string $phoneNumber,
         float $balance = 0,
         ?string $twoFactorSecret = null
     ): User {
@@ -36,7 +34,6 @@ class UserService
             'name' => $name,
             'username' => $username,
             'password' => $password,
-            'phone_number' => $phoneNumber,
             'two_factor_secret' => $twoFactorSecret,
         ]);
     }

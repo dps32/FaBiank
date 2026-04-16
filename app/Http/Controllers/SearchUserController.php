@@ -23,7 +23,7 @@ class SearchUserController extends Controller
                     ->orWhere('name', 'like', '%' . $query . '%');
             })
             ->where('id', '!=', $currentUserId)
-            ->select(['id', 'name', 'username', 'phone_number'])
+            ->select(['id', 'name', 'username'])
             ->limit(10)
             ->get();
 

@@ -86,6 +86,7 @@
     opacity: 0;
     transform: translateY(-6px);
     pointer-events: none;
+    scrollbar-width: none;
     transition: opacity 0.2s ease, transform 0.2s ease;
 }
 

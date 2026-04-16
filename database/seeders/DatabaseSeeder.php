@@ -24,42 +24,36 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Andrea Garcia',
                 'username' => 'andrea',
                 'password' => 'andrea123',
-                'phone_number' => '600100101',
             ],
             [
                 'balance' => 480.20,
                 'name' => 'Carlos Martinez',
                 'username' => 'carlos',
                 'password' => 'carlos123',
-                'phone_number' => '600100102',
             ],
             [
                 'balance' => 615.90,
                 'name' => 'Lucia Fernandez',
                 'username' => 'lucia',
                 'password' => 'lucia123',
-                'phone_number' => '600100103',
             ],
             [
                 'balance' => 740.40,
                 'name' => 'David Romero',
                 'username' => 'david',
                 'password' => 'david123',
-                'phone_number' => '600100104',
             ],
             [
                 'balance' => 890.10,
                 'name' => 'Paula Navarro',
                 'username' => 'paula',
                 'password' => 'paula123',
-                'phone_number' => '600100105',
             ],
             [
                 'balance' => 1050.55,
                 'name' => 'Miguel Torres',
                 'username' => 'miguel',
                 'password' => 'miguel123',
-                'phone_number' => '600100106',
             ],
         ];
 

@@ -1,6 +1,5 @@
 ﻿(() => {
     const $ = (id) => document.getElementById(id);
-    const phoneInput = $('phone_number');
     const registerButton = $('registerButton');
     const errorMessage = document.querySelector('.error-message');
 
@@ -32,10 +31,6 @@
         errorMessage.classList.remove('show');
     };
 
-    phoneInput?.addEventListener('input', () => {
-        phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 9);
-    });
-
     registerButton.addEventListener('click', async () => {
         clearError();
         console.log('[REGISTER] Inicio de registro');
@@ -43,20 +38,13 @@
         const payload = {
             name: value('name').trim(),
             username: value('username').trim(),
-            phone_number: value('phone_number').trim(),
             password: value('password'),
             password_confirmation: value('password_confirmation'),
         };
 
-        if (!payload.name || !payload.username || !payload.phone_number || !payload.password || !payload.password_confirmation) {
+        if (!payload.name || !payload.username || !payload.password || !payload.password_confirmation) {
             console.error('[REGISTER] Faltan campos obligatorios');
             setError('Completa todos los campos.');
-            return;
-        }
-
-        if (!/^\d{9}$/.test(payload.phone_number)) {
-            console.error('[REGISTER] Telefono invalido: deben ser 9 digitos');
-            setError('El telefono debe tener 9 digitos.');
             return;
         }
 
@@ -81,7 +69,6 @@
         console.log('[REGISTER] Payload', {
             name: payload.name,
             username: payload.username,
-            phone_number: payload.phone_number,
             password_length: payload.password.length,
             password_confirmation_length: payload.password_confirmation.length,
         });

@@ -33,7 +33,6 @@ class FinanceDataService
         string $name,
         string $username,
         string $password,
-        string $phoneNumber,
         float $balance = 0,
         ?string $twoFactorSecret = null
     ): \App\Models\User {
@@ -41,7 +40,6 @@ class FinanceDataService
             name: $name,
             username: $username,
             password: $password,
-            phoneNumber: $phoneNumber,
             balance: $balance,
             twoFactorSecret: $twoFactorSecret
         );

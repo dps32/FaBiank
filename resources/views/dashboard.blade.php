@@ -31,7 +31,7 @@
 
                 <article id="transactionsCard" class="card transactions-card">
                     <div class="card-title-row">
-                        <h2>Ultimas transacciones</h2>
+                        <h2>Últimas transacciones</h2>
                         <a href="{{ route('history') }}">Ver todas</a>
                     </div>
 
