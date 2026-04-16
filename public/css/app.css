@@ -89,6 +89,28 @@ button:hover {
     color: #5563ff;
 }
 
+.nav-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 0 24px;
+    margin: 18px 0 10px 0;
+    width: 100%;
+}
+
+.nav-wrapper .menu {
+    margin: 0;
+    padding: 5px;
+}
+
+.nav-wrapper .search-menu-button-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
 .input-container {
     position: relative;
     width: 100%;

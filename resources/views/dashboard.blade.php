@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/search-users.css') }}">
 </head>
 <body>
     <x-menu />
@@ -86,10 +87,39 @@
         <div id="sendModal" class="modal" aria-hidden="true">
             <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="sendModalTitle">
                 <div class="modal-header">
-                    <h3 id="sendModalTitle">Enviar</h3>
+                    <h3 id="sendModalTitle">Enviar dinero</h3>
                     <button type="button" class="modal-close" data-close-modal="sendModal">Cerrar</button>
                 </div>
-                <p>TODO: enviar dinero.</p>
+
+                <form id="sendMoneyForm" class="send-form">
+                    <div class="form-group">
+                        <label for="recipientUsername">Usuario destinatario</label>
+                        <input
+                            type="text"
+                            id="recipientUsername"
+                            name="recipientUsername"
+                            placeholder="Nombre del usuario"
+                            required
+                        >
+                        <input type="hidden" id="recipientId" name="recipientId" value="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transferAmount">Cantidad</label>
+                        <input
+                            type="number"
+                            id="transferAmount"
+                            name="transferAmount"
+                            placeholder="0.00"
+                            min="0.01"
+                            step="0.01"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="form-submit">Enviar</button>
+                    <p id="sendError" class="form-error"></p>
+                </form>
             </div>
         </div>
 
@@ -103,6 +133,8 @@
             </div>
         </div>
     </div>
+
+    <button id="logoutButton" type="button" data-logout-url="{{ route('logout') }}" data-login-url="{{ route('login') }}" style="display: none;">Deslogearse</button>
 
     <script src="{{ asset('js/dashboard.js') }}" defer></script>
 </body>

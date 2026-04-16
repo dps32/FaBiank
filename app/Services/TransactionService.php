@@ -4,10 +4,50 @@ namespace App\Services;
 
 use App\Models\PaymentRequest;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
 class TransactionService
 {
+    // Transferencia completa: valida saldo, crea transacción y actualiza balances.
+    public function transfer(User $sender, User $recipient, float $amount): Transaction
+    {
+        // Validar que el monto sea positivo
+        if ($amount <= 0) {
+            throw new \InvalidArgumentException('La cantidad debe ser mayor a 0.');
+        }
+
+        // Validar saldo suficiente
+        $senderBalance = (float) $sender->balance;
+        if ($senderBalance < $amount) {
+            throw new \InvalidArgumentException('Saldo insuficiente para realizar la transacción.');
+        }
+
+        // Validar que no sea a sí mismo
+        if ($sender->id === $recipient->id) {
+            throw new \InvalidArgumentException('No puedes enviar dinero a ti mismo.');
+        }
+
+        // Crear transacción
+        $transaction = Transaction::create([
+            'sender_id' => $sender->id,
+            'receiver_id' => $recipient->id,
+            'amount' => $amount,
+            'date' => now()->toDateString(),
+        ]);
+
+        // Actualizar balances
+        $sender->update([
+            'balance' => $senderBalance - $amount,
+        ]);
+
+        $recipient->update([
+            'balance' => ((float) $recipient->balance) + $amount,
+        ]);
+
+        return $transaction;
+    }
+
     // Crea transacción y valida datos.
     public function createTransaction(array $data): Transaction
     {

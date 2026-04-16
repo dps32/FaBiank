@@ -3,6 +3,8 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SearchUserController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -48,5 +50,15 @@ Route::get('/history', function(){
 Route::get('/investments', function(){
     return view('investments');
 })->middleware('auth')->name('investments');
+
+// API: Search users
+Route::get('/api/search-users', [SearchUserController::class, 'search'])
+    ->middleware('auth')
+    ->name('api.search-users');
+
+// API: Create transaction
+Route::post('/api/transactions', [TransactionController::class, 'store'])
+    ->middleware('auth')
+    ->name('api.transactions.store');
 
 
