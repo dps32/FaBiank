@@ -1,0 +1,142 @@
+.history-wrap {
+    width: min(1100px, 96vw);
+    margin-top: 24px;
+    padding: 0 6px 28px;
+}
+
+.history-card {
+    backdrop-filter: blur(15px);
+    background-color: rgba(255, 255, 255, 0.16);
+    border-radius: 30px;
+    border: 1px solid #ffffff7a;
+    box-shadow: 0 10px 24px 0 rgba(0, 0, 0, 0.1);
+    padding: 20px 24px;
+}
+
+.history-section + .history-section {
+    margin-top: 24px;
+}
+
+.history-section-title {
+    margin: 0 4px 12px;
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    color: rgba(25, 25, 25, 0.68);
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.24);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px 20px;
+}
+
+.history-item-dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #000;
+    flex: 0 0 auto;
+}
+
+.history-item-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.history-item-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: 0.3px;
+    color: rgba(15, 15, 15, 0.95);
+}
+
+.history-item-subtitle {
+    margin: 2px 0 0;
+    font-size: 14px;
+    line-height: 1.1;
+    color: rgba(35, 35, 35, 0.66);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.history-item-balance {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: rgba(35, 35, 35, 0.58);
+}
+
+.history-item-amount {
+    margin: 0;
+    flex: 0 0 auto;
+    font-size: 25px;
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+}
+
+.history-item-amount.is-positive {
+    color: #0ea52f;
+}
+
+.history-item-amount.is-negative {
+    color: #5b5b5b;
+}
+
+.empty-state {
+    margin: 10px 4px;
+    color: rgba(43, 43, 43, 0.86);
+}
+
+@media (max-width: 760px) {
+    .history-card {
+        border-radius: 22px;
+        padding: 16px;
+    }
+
+    .history-item {
+        padding: 10px 12px;
+        gap: 10px;
+    }
+
+    .history-item-dot {
+        width: 18px;
+        height: 18px;
+    }
+
+    .history-section-title {
+        font-size: 22px;
+    }
+
+    .history-item-title {
+        font-size: 14px;
+    }
+
+    .history-item-subtitle {
+        font-size: 12px;
+    }
+
+    .history-item-amount {
+        font-size: 24px;
+    }
+
+    .history-item-balance {
+        margin-top: 3px;
+    }
+}

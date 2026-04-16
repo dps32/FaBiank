@@ -6,7 +6,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
 }
 
 .dashboard-grid {
@@ -158,6 +157,13 @@
     flex-direction: column;
 }
 
+.payment-requests-card {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    grid-column: 1;
+}
+
 .investments-card {
     grid-area: investments;
     width: 390px;
@@ -216,6 +222,52 @@
 
 .right {
     text-align: right;
+}
+
+.request-row {
+    align-items: flex-start;
+}
+
+.request-actions-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.request-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.request-btn {
+    all: unset;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1;
+    padding: 7px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    transition: 0.2s ease;
+}
+
+.request-btn:hover {
+    transform: translateY(-1px);
+}
+
+.request-btn:disabled {
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+.request-btn.is-accept {
+    color: #0f7a1f;
+    background: rgba(16, 174, 66, 0.16);
+}
+
+.request-btn.is-reject {
+    color: #9f2323;
+    background: rgba(199, 60, 60, 0.14);
 }
 
 .amount {

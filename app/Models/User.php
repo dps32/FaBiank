@@ -20,6 +20,7 @@ class User extends Authenticatable
     // Campos que se pueden guardar con create().
     protected $fillable = [
         'balance',
+        'name',
         'username',
         'password',
         'phone_number',

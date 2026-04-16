@@ -11,6 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('users')) {
+            return;
+        }
+
+        if (!Schema::hasColumn('users', 'sms_code') || Schema::hasColumn('users', 'two_factor_secret')) {
+            return;
+        }
+
         $driver = DB::getDriverName();
 
         if ($driver === 'mysql') {
@@ -35,6 +43,14 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (!Schema::hasTable('users')) {
+            return;
+        }
+
+        if (!Schema::hasColumn('users', 'two_factor_secret') || Schema::hasColumn('users', 'sms_code')) {
+            return;
+        }
+
         $driver = DB::getDriverName();
 
         if ($driver === 'mysql') {

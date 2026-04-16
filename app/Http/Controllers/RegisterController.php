@@ -15,18 +15,20 @@ class RegisterController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'name'=>['required', 'string', 'min:3', 'max:120'],
             'username'=>['required', 'string', 'min:3', 'max:50', 'alpha_dash', 'unique:users,username'],
             'phone_number'=>['required', 'regex:/^\d{9}$/', 'unique:users,phone_number'],
             'password'=>['required','string','min:8','confirmed'],
         ], [
+            'name.required'=>'El nombre completo es obligatorio.',
             'username.unique'=>'Este usuario ya existe. Cambia el nombre o logeate.',
             'phone_number.regex'=>'El telefono tiene que tener 9 digitos.',
             'phone_number.unique'=>'Este telefono ya existe.',
             'password.min'=>'La contraseña debe tener al menos 8 caracteres.',
             'password.confirmed'=>'La confirmación de contraseña no coincide.',
         ]);
-
         $user = User::create([
+            'name'=>$validated['name'],
             'username'=>$validated['username'],
             'phone_number'=>$validated['phone_number'],
             'password'=>$validated['password'],

@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PaymentRequestController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SearchUserController;
 use App\Http\Controllers\TransactionController;
@@ -49,9 +51,9 @@ Route::get('/dashboard', [DashboardController::class, 'show'])
     ->name('dashboard');
 
 // History
-Route::get('/history', function(){
-    return view('history');
-})->middleware('auth')->name('history');
+Route::get('/history', [HistoryController::class, 'show'])
+    ->middleware('auth')
+    ->name('history');
 
 // Investments
 Route::get('/investments', function(){
@@ -67,5 +69,15 @@ Route::get('/api/search-users', [SearchUserController::class, 'search'])
 Route::post('/api/transactions', [TransactionController::class, 'store'])
     ->middleware('auth')
     ->name('api.transactions.store');
+
+// API: Create payment request
+Route::post('/api/payment-requests', [PaymentRequestController::class, 'store'])
+    ->middleware('auth')
+    ->name('api.payment-requests.store');
+
+// API: Respond payment request
+Route::post('/api/payment-requests/{paymentRequestId}/respond', [PaymentRequestController::class, 'respond'])
+    ->middleware('auth')
+    ->name('api.payment-requests.respond');
 
 

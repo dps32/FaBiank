@@ -12,59 +12,73 @@ return new class extends Migration
     public function up(): void
     {
         // Tabla de usuarios.
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->decimal('balance', 10, 2)->default(0);
-            $table->string('username')->unique();
-            $table->string('password');
-            $table->string('phone_number');
-            $table->string('two_factor_secret')->nullable();
-        });
+        if (!Schema::hasTable('users')) {
+            Schema::create('users', function (Blueprint $table) {
+                $table->id();
+                $table->decimal('balance', 10, 2)->default(0);
+                $table->string('name');
+                $table->string('username')->unique();
+                $table->string('password');
+                $table->string('phone_number');
+                $table->string('two_factor_secret')->nullable();
+            });
+        }
 
         // Transacciones entre usuarios.
-        Schema::create('transactions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('sender_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('receiver_id')->constrained('users')->cascadeOnDelete();
-            $table->decimal('amount', 10, 2);
-            $table->date('date');
-        });
+        if (!Schema::hasTable('transactions')) {
+            Schema::create('transactions', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('sender_id')->constrained('users')->cascadeOnDelete();
+                $table->foreignId('receiver_id')->constrained('users')->cascadeOnDelete();
+                $table->decimal('amount', 10, 2);
+                $table->dateTime('date');
+            });
+        }
 
         // Solicitudes de pago.
-        Schema::create('payment_requests', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('requester_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('target_id')->constrained('users')->cascadeOnDelete();
-            $table->decimal('amount', 10, 2);
-            $table->date('date');
-        });
+        if (!Schema::hasTable('payment_requests')) {
+            Schema::create('payment_requests', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('requester_id')->constrained('users')->cascadeOnDelete();
+                $table->foreignId('target_id')->constrained('users')->cascadeOnDelete();
+                $table->decimal('amount', 10, 2);
+                $table->string('status', 20)->default('pending');
+                $table->dateTime('date');
+            });
+        }
 
         // Lista de acciones.
-        Schema::create('stocks', function (Blueprint $table) {
-            $table->id();
-            $table->string('ticker')->unique();
-            $table->string('name');
-            $table->decimal('current_price', 10, 2);
-        });
+        if (!Schema::hasTable('stocks')) {
+            Schema::create('stocks', function (Blueprint $table) {
+                $table->id();
+                $table->string('ticker')->unique();
+                $table->string('name');
+                $table->decimal('current_price', 10, 2);
+            });
+        }
 
         // Inversiones de usuarios.
-        Schema::create('investments', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('stock_id')->constrained('stocks')->cascadeOnDelete();
-            $table->integer('quantity');
-            $table->decimal('buy_price', 10, 2);
-            $table->decimal('sell_price', 10, 2)->nullable();
-            $table->boolean('is_sold')->default(false);
-        });
+        if (!Schema::hasTable('investments')) {
+            Schema::create('investments', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+                $table->foreignId('stock_id')->constrained('stocks')->cascadeOnDelete();
+                $table->integer('quantity');
+                $table->decimal('buy_price', 10, 2);
+                $table->decimal('sell_price', 10, 2)->nullable();
+                $table->boolean('is_sold')->default(false);
+            });
+        }
 
         // Trades de cada inversión.
-        Schema::create('investment_trade', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('investment_id')->constrained('investments')->cascadeOnDelete();
-            $table->string('type');
-            $table->date('date');
-        });
+        if (!Schema::hasTable('investment_trade')) {
+            Schema::create('investment_trade', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('investment_id')->constrained('investments')->cascadeOnDelete();
+                $table->string('type');
+                $table->datetime('date');
+            });
+        }
     }
 
     /**

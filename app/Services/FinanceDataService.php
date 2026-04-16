@@ -30,6 +30,7 @@ class FinanceDataService
 
     // Atajo para crear usuario.
     public function insertUser(
+        string $name,
         string $username,
         string $password,
         string $phoneNumber,
@@ -37,6 +38,7 @@ class FinanceDataService
         ?string $twoFactorSecret = null
     ): \App\Models\User {
         return $this->userService->createTyped(
+            name: $name,
             username: $username,
             password: $password,
             phoneNumber: $phoneNumber,

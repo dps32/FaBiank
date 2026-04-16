@@ -18,6 +18,7 @@ class PaymentRequest extends Model
         'requester_id',
         'target_id',
         'amount',
+        'status',
         'date',
     ];
 
@@ -26,7 +27,7 @@ class PaymentRequest extends Model
     {
         return [
             'amount' => 'decimal:2',
-            'date' => 'date',
+            'date' => 'datetime',
         ];
     }
 

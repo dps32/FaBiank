@@ -21,8 +21,12 @@
 
         <div class="register-container">
             <div class="input-container">
+                <input type="text" name="name" id="name" placeholder=" ">
+                <span class="placeholder">Nombre completo</span>
+            </div>
+            <div class="input-container">
                 <input type="text" name="username" id="username" placeholder=" ">
-                <span class="placeholder">Usuario</span>
+                <span class="placeholder">Nombre de usuario</span>
             </div>
             <div class="input-container">
                 <input type="tel" name="phone_number" id="phone_number" placeholder=" " maxlength="9" inputmode="numeric">

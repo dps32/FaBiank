@@ -12,6 +12,7 @@ class UserService
     {
         $validated = Validator::make($data, [
             'balance' => ['sometimes', 'numeric', 'min:0'],
+            'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:users,username'],
             'password' => ['required', 'string', 'min:6', 'max:255'],
             'phone_number' => ['required', 'string', 'max:255'],
@@ -23,6 +24,7 @@ class UserService
 
     // Lo mismo pero con parámetros directos.
     public function createTyped(
+        string $name,
         string $username,
         string $password,
         string $phoneNumber,
@@ -31,6 +33,7 @@ class UserService
     ): User {
         return $this->create([
             'balance' => $balance,
+            'name' => $name,
             'username' => $username,
             'password' => $password,
             'phone_number' => $phoneNumber,

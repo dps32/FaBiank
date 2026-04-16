@@ -41,13 +41,14 @@
         console.log('[REGISTER] Inicio de registro');
 
         const payload = {
+            name: value('name').trim(),
             username: value('username').trim(),
             phone_number: value('phone_number').trim(),
             password: value('password'),
             password_confirmation: value('password_confirmation'),
         };
 
-        if (!payload.username || !payload.phone_number || !payload.password || !payload.password_confirmation) {
+        if (!payload.name || !payload.username || !payload.phone_number || !payload.password || !payload.password_confirmation) {
             console.error('[REGISTER] Faltan campos obligatorios');
             setError('Completa todos los campos.');
             return;
@@ -78,6 +79,7 @@
         }
 
         console.log('[REGISTER] Payload', {
+            name: payload.name,
             username: payload.username,
             phone_number: payload.phone_number,
             password_length: payload.password.length,
