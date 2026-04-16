@@ -1,4 +1,4 @@
-@font-face {
+﻿@font-face {
     font-family: 'Montserrat';
     src: url('../fonts/montserrat-400.woff2') format('woff2');
     font-weight: 400;
@@ -20,6 +20,10 @@
     font-weight: 700;
     font-style: normal;
     font-display: block;
+}
+
+@view-transition {
+  navigation: auto;
 }
 
 * {
@@ -72,10 +76,18 @@ button {
     padding: 10px 20px;
     width: 100%;
     cursor: pointer;
+    font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+    will-change: transform;
+    outline: none;
     transition: 0.2s ease;
 }
+
 button:hover {
-    transform: translateY(-2px);
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+button:active {
+    transform: scale(0.98);
 }
 
 .content a {

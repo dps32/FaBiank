@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\TwoFactorService;
 use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
+    public function __construct(private TwoFactorService $twoFactorService)
+    {
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -17,10 +22,11 @@ class RegisterController extends Controller
             'username.unique'=>'Este usuario ya existe. Cambia el nombre o logeate.',
             'phone_number.regex'=>'El telefono tiene que tener 9 digitos.',
             'phone_number.unique'=>'Este telefono ya existe.',
-            'password.min'=>'La contrasena debe tener al menos 8 caracteres.',
-            'password.confirmed'=>'La confirmacion de contraseña no coincide.',   
+            'password.min'=>'La contraseña debe tener al menos 8 caracteres.',
+            'password.confirmed'=>'La confirmación de contraseña no coincide.',
         ]);
-        User::create([
+
+        $user = User::create([
             'username'=>$validated['username'],
             'phone_number'=>$validated['phone_number'],
             'password'=>$validated['password'],
@@ -28,12 +34,14 @@ class RegisterController extends Controller
             'two_factor_secret'=>null,
         ]);
 
-        if ($request->expectsJson()) {
-            return response()->json([
-                'message' => 'Cuenta creada correctamente.'
-            ]);
-        }
+        $request->session()->put('two_factor_setup', [
+            'user_id' => $user->id,
+            'secret' => $this->twoFactorService->generateSecret(),
+        ]);
 
-        return redirect()->route('login')->with('status','Cuenta creada correctamente.');
+        return response()->json([
+            'message' => 'Cuenta creada correctamente. Configura tu doble factor.',
+            'redirect' => route('two-factor.setup.show'),
+        ]);
     }
 }

@@ -37,6 +37,7 @@
                 <span class="placeholder">Confirmar contraseña</span>
             </div>
 
+            <p class="error-message"></p>
             <button id="registerButton" type="button" data-register-url="{{ route('register.store') }}" data-login-url="{{ route('login') }}">Registrarse</button>
             <p>¿Ya tienes cuenta? <a href="{{ route("login") }}">Iniciar Sesión</a></p>
         </div>

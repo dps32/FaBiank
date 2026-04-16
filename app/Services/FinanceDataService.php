@@ -34,16 +34,14 @@ class FinanceDataService
         string $password,
         string $phoneNumber,
         float $balance = 0,
-        bool $isVerified = false,
-        ?string $smsCode = null
+        ?string $twoFactorSecret = null
     ): \App\Models\User {
         return $this->userService->createTyped(
             username: $username,
             password: $password,
             phoneNumber: $phoneNumber,
             balance: $balance,
-            isVerified: $isVerified,
-            smsCode: $smsCode
+            twoFactorSecret: $twoFactorSecret
         );
     }
 

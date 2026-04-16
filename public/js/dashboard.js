@@ -104,7 +104,8 @@
                 return;
             }
 
-            window.location.assign(loginUrl);
+            const data = await response.json().catch(() => ({}));
+            window.location.assign(data.redirect ?? loginUrl);
         } catch (error) {
             console.error('Error logging out:', error);
         }

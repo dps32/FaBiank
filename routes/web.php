@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SearchUserController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\TwoFactorController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,12 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::post('/login', [LoginController::class, 'store'])->name('login.store');
+
+// Two factor
+Route::get('/2fa/setup', [TwoFactorController::class, 'setupCreate'])->name('two-factor.setup.show');
+Route::post('/2fa/setup', [TwoFactorController::class, 'setupStore'])->name('two-factor.setup.store');
+Route::get('/2fa/challenge', [TwoFactorController::class, 'challengeCreate'])->name('two-factor.challenge.show');
+Route::post('/2fa/challenge', [TwoFactorController::class, 'challengeStore'])->name('two-factor.challenge.store');
 
 // Logout
 Route::post('/logout', [LoginController::class, 'destroy'])

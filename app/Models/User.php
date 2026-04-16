@@ -29,6 +29,7 @@ class User extends Authenticatable
     // Esto se oculta cuando devuelves el user.
     protected $hidden = [
         'password',
+        'two_factor_secret',
     ];
 
     // Tipos automáticos.

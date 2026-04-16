@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Login</title>
+    <title>Configurar 2FA</title>
     <link rel="icon" href="{{ asset('favicon.ico') }}">
     <link rel="preload" href="{{ asset('fonts/montserrat-400.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ asset('fonts/montserrat-500.woff2') }}" as="font" type="font/woff2" crossorigin>
@@ -17,24 +17,23 @@
     <x-menu />
 
     <div class="content">
-        <h1>Iniciar sesión</h1>
-        
+        <h1>Configurar 2FA</h1>
+
         <div class="login-container">
+            <p>Escanea este QR con tu app de autenticación</p>
+            <img class="two-factor-qr" src="{{ $qrUrl }}">
+            <p class="two-factor-secret">Secret: {{ $secret }}</p>
+
             <div class="input-container">
-                <input type="text" name="username" id="username" placeholder=" ">
-                <span class="placeholder">Usuario</span>
-            </div>
-            <div class="input-container">
-                <input type="password" name="password" id="password" placeholder=" ">
-                <span class="placeholder">Contraseña</span>
+                <input type="text" name="two_factor_code" id="two_factor_code" placeholder=" " maxlength="6" inputmode="numeric">
+                <span class="placeholder">Código de 6 digitos</span>
             </div>
 
-            
             <p class="error-message"></p>
-            <button id="loginButton" data-login-url="{{ route('login.store') }}" data-dashboard-url="{{ route('dashboard') }}">Iniciar Sesión</button>
-            <p>¿No tienes cuenta? <a href="{{ route("register") }}">Registrarse</a></p>
+            <button id="twoFactorSetupButton" data-setup-url="{{ route('two-factor.setup.store') }}" data-login-url="{{ route('login') }}">Confirmar 2FA</button>
         </div>
     </div>
-    <script src="{{ asset('js/login.js') }}" defer></script>
+
+    <script src="{{ asset('js/two-factor-setup.js') }}" defer></script>
 </body>
 </html>

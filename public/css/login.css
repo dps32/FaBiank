@@ -1,4 +1,4 @@
-.login-container,
+﻿.login-container,
 .register-container {
     display: flex;
     flex-direction: column;
@@ -11,15 +11,23 @@
     margin-top: 50px;
     box-shadow: 0 10px 24px 0 rgba(0, 0, 0, 0.1);
     border: 1px solid #ffffff7a;
-    width: 100%;
-    max-width: 420px;
-    margin-left: auto;
-    margin-right: auto;
+    transition: 0.3s ease;
+}
+
+.register-container {
+    min-width: 400px;
 }
 
 .login-container input,
 .register-container input {
     width: 100%;
+    box-shadow: 0 0 0px 0px #00000014;
+    transition: 0.3s ease;
+}
+
+.login-container input:focus,
+.register-container input:focus {
+    box-shadow: 0 0 0px 3px #00000014;
 }
 
 .login-container p,
@@ -27,7 +35,42 @@
     color: #353535;
 }
 
+p.error-message {
+    color: #d94646;
+    font-size: 14px;
+    min-height: 18px;
+    margin-bottom: -20px;
+    margin-top: 0;
+    width: 100%;
+    padding-left: 10px;
+    opacity: 0;
+    transition: 0.3s ease;
+}
+
+p.error-message.show {
+    opacity: 1;
+}
+
 #loginButton,
-#registerButton {
-    margin-top: 20px;
+#registerButton,
+#twoFactorSetupButton,
+#twoFactorLoginButton {
+    margin-top: 5px;
+    font-size: 15px;
+}
+
+.two-factor-qr {
+    width: 220px;
+    height: 220px;
+    border-radius: 16px;
+    border: 1px solid #ffffff7a;
+    box-shadow: 0 10px 24px 0 rgba(0, 0, 0, 0.1);
+}
+
+.two-factor-secret {
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    font-size: 13px;
+    word-break: break-all;
 }

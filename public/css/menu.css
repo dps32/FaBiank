@@ -1,53 +1,25 @@
-.menu {
+﻿.menu {
     position: relative;
+    display: flex;
+    padding: 5px;
+    width: fit-content;
+    border-radius: 999px;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid #ffffff7a;
+    box-shadow: 0 10px 24px 0 rgba(0, 0, 0, 0.2);
+}
+
+.menu-links {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     gap: 5px;
-    padding: 5px;
-    width: fit-content;
-    border-radius: 999px;
-    isolation: isolate;
-}
-
-.menu::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    z-index: 0;
-    backdrop-filter: blur(10px);
-    background-color: rgba(255, 255, 255, 0.15);
-    border: 1px solid #ffffff7a;
-    box-shadow: 0 10px 24px 0 rgba(0, 0, 0, 0.2);
-    transform: scaleX(1);
-    will-change: transform;
-    transition: 0.4s ease;
-}
-
-.menu-links {
-    display: flex;
-    gap: 5px;
-    align-items: center;
-}
-
-.menu:has(.menu-link:hover)::before {
-    transform: scaleX(1.1);
-}
-
-.menu.block::before,
-.menu.block:has(.menu-link:hover)::before {
-    transform: scaleX(1);
-}
-
-.menu.block .menu-link.is-active {
-    transform: none !important;
 }
 
 .menu-link {
     all: unset;
-    will-change: transform;
     position: relative;
     cursor: pointer;
     display: flex;
@@ -62,13 +34,13 @@
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.05);
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.18);
-    transition: 0.2s ease, background 0.4s ease;
+    will-change: transform;
+    transition: 0.3s ease;
 }
 
 .menu-link:hover {
-    transform: translateY(-2px);
     background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
+    padding: 14px 20px;
 }
 
 .menu-link.is-active {
@@ -83,38 +55,4 @@
 
 .menu-link:active {
     transform: scale(0.97);
-}
-
-.menu-search-button {
-    all: unset;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px 12px;
-    border-radius: 999px;
-    width: auto;
-    height: auto;
-    color: rgba(0, 0, 0, 1);
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border: 1px solid #ffffff7a;
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.18);
-    transition: 0.2s ease;
-    position: relative;
-    z-index: 1;
-}
-
-.menu-search-button:hover {
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
-    transform: translateY(-1px);
-}
-
-.menu-search-button:active {
-    transform: scale(0.95);
-}
-
-.menu.block {
-    pointer-events: none;
 }

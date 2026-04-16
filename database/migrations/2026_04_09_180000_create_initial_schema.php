@@ -18,8 +18,7 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('password');
             $table->string('phone_number');
-            $table->boolean('is_verified')->default(false);
-            $table->string('sms_code')->nullable();
+            $table->string('two_factor_secret')->nullable();
         });
 
         // Transacciones entre usuarios.

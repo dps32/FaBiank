@@ -10,7 +10,7 @@
 
     const csrfMeta = document.querySelector('meta[name="csrf-token"]');
     const csrfToken = csrfMeta ? csrfMeta.content : '';
-    const searchUrl = '/api/search-users';
+    const searchUrl = 'api/search-users';
 
     let searchTimeout;
 
@@ -18,50 +18,18 @@
         return !!searchPanel?.classList.contains('is-open');
     }
 
-    function positionSearchPanel() {
-        if (!searchPanel || !searchButton) {
-            return;
-        }
-
-        const rect = searchButton.getBoundingClientRect();
-        const panelLeft = Math.round(rect.right + 10);
-        const panelTop = Math.round(rect.top + (rect.height / 2));
-
-        searchPanel.style.left = `${panelLeft}px`;
-        searchPanel.style.top = `${panelTop}px`;
-    }
 
     function openSearchPanel() {
-        if (!searchPanel) {
-            return;
-        }
-
-        positionSearchPanel();
+        if (!searchPanel) return;
         searchPanel.classList.add('is-open');
-        searchPanel.setAttribute('aria-hidden', 'false');
-        searchButton?.setAttribute('aria-expanded', 'true');
-
-        if (searchInput) {
-            searchInput.focus();
-        }
+        if (searchInput) searchInput.focus();
     }
 
     function closeSearchPanel() {
-        if (!searchPanel) {
-            return;
-        }
-
+        if (!searchPanel) return;
         searchPanel.classList.remove('is-open');
-        searchPanel.setAttribute('aria-hidden', 'true');
-        searchButton?.setAttribute('aria-expanded', 'false');
-
-        if (searchInput) {
-            searchInput.value = '';
-        }
-
-        if (searchResults) {
-            searchResults.innerHTML = '<p class="search-empty">Empieza a escribir para buscar...</p>';
-        }
+        if (searchInput) searchInput.value = '';
+        if (searchResults) searchResults.classList.remove('show');
     }
 
     function renderResults(users) {
@@ -107,10 +75,6 @@
             return;
         }
 
-        if (!query || query.trim().length < 1) {
-            searchResults.innerHTML = '<p class="search-empty">Empieza a escribir para buscar...</p>';
-            return;
-        }
 
         try {
             const response = await fetch(`${searchUrl}?q=${encodeURIComponent(query)}`, {
@@ -171,6 +135,13 @@
     });
 
     searchInput?.addEventListener('input', (e) => {
+        // mostrar resultados solo cuando haya una búsqueda
+        if (searchInput.value.trim().length === 0) {
+            searchResults.classList.remove('show');
+        } else {
+            searchResults.classList.add('show');
+        }
+
         const query = e.target.value;
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
@@ -196,16 +167,4 @@
             closeSearchPanel();
         }
     });
-
-    window.addEventListener('resize', () => {
-        if (isOpen()) {
-            positionSearchPanel();
-        }
-    });
-
-    window.addEventListener('scroll', () => {
-        if (isOpen()) {
-            positionSearchPanel();
-        }
-    }, { passive: true });
 })();
