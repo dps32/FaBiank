@@ -7,10 +7,14 @@
     const searchPanel = byId('searchPanel');
     const searchInput = byId('searchInput');
     const searchResults = byId('searchResults');
+    const sendActionIconTemplate = byId('searchActionSendIconTemplate');
+    const receiveActionIconTemplate = byId('searchActionReceiveIconTemplate');
 
     const csrfMeta = document.querySelector('meta[name="csrf-token"]');
     const csrfToken = csrfMeta ? csrfMeta.content : '';
     const searchUrl = 'api/search-users';
+    const sendActionIconMarkup = sendActionIconTemplate?.innerHTML ?? '';
+    const receiveActionIconMarkup = receiveActionIconTemplate?.innerHTML ?? '';
 
     let searchTimeout;
 
@@ -48,17 +52,31 @@
                     <p class="search-result-name">${escapeHtml(user.name || user.username)}</p>
                     <p class="search-result-phone">@${escapeHtml(user.username)}</p>
                 </div>
-                <button type="button" class="search-result-action" data-user-id="${user.id}">
-                    Enviar →
-                </button>
+                <div class="search-result-actions">
+                    <button type="button" class="search-result-action is-send" data-user-id="${user.id}" data-action="send">
+                        <span>Enviar</span>
+                        ${sendActionIconMarkup}
+                    </button>
+                    <button type="button" class="search-result-action is-receive" data-user-id="${user.id}" data-action="receive">
+                        <span>Recibir</span>
+                        ${receiveActionIconMarkup}
+                    </button>
+                </div>
             </div>
         `).join('');
 
         document.querySelectorAll('.search-result-action').forEach((button) => {
             button.addEventListener('click', () => {
                 const userId = button.getAttribute('data-user-id');
+                const action = button.getAttribute('data-action');
                 const item = button.closest('.search-result-item');
                 const userName = item ? item.getAttribute('data-user-name') : '';
+
+                if (action === 'receive') {
+                    handleReceiveMoney(userId, userName);
+                    return;
+                }
+
                 handleSendMoney(userId, userName);
             });
         });
@@ -115,6 +133,29 @@
             sendModal.setAttribute('aria-hidden', 'false');
 
             const amountField = document.getElementById('transferAmount');
+            if (amountField) {
+                amountField.focus();
+            }
+        }
+    }
+
+    function handleReceiveMoney(userId, userName) {
+        closeSearchPanel();
+
+        const requestTargetIdField = document.getElementById('requestTargetId');
+        const requestTargetUsernameField = document.getElementById('requestTargetUsername');
+
+        if (requestTargetIdField && requestTargetUsernameField) {
+            requestTargetIdField.value = userId;
+            requestTargetUsernameField.value = userName || '';
+        }
+
+        const receiveModal = document.getElementById('receiveModal');
+        if (receiveModal) {
+            receiveModal.classList.add('is-open');
+            receiveModal.setAttribute('aria-hidden', 'false');
+
+            const amountField = document.getElementById('requestAmount');
             if (amountField) {
                 amountField.focus();
             }

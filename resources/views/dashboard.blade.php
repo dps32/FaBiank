@@ -22,11 +22,6 @@
                         <p class="card-label">Saldo disponible</p>
                         <p id="balanceValue" class="balance-value">${{ number_format($balance, 2) }}</p>
                     </article>
-
-                    <article class="actions-card">
-                        <button class="action-btn" type="button" id="openSendModal">Enviar</button>
-                        <button class="action-btn" type="button" id="openReceiveModal">Recibir</button>
-                    </article>
                 </div>
 
                 <article id="transactionsCard" class="card transactions-card">

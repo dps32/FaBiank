@@ -2,7 +2,7 @@
     width: 100%;
     flex: 1;
     min-height: calc(100vh - 92px);
-    padding: 0 24px 24px;
+    padding: 0 24px 112px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -53,42 +53,6 @@
     flex: 1 1 0;
     min-width: 260px;
     min-height: 162px;
-}
-
-.actions-card {
-    flex: 1 1 0;
-    min-width: 280px;
-    min-height: 162px;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: stretch;
-    gap: 10px;
-}
-
-.actions-card .action-btn {
-    all: unset;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 100%;
-    flex: 1;
-    margin: 0;
-    text-align: center;
-    border-radius: 999px;
-    border: 1px solid rgba(0, 0, 0, 0.28);
-    background: rgba(255, 255, 255, 0.28);
-    padding: 10px 14px;
-    font-size: 18px;
-    color: #2e2e2e;
-    transition: 0.2s ease;
-}
-
-.actions-card .action-btn:hover {
-    transform: translateY(-1px);
-    background: rgba(255, 255, 255, 0.42);
 }
 
 .modal {
@@ -335,10 +299,6 @@
     }
 
     .balance-card {
-        flex-basis: auto;
-    }
-
-    .actions-card {
         flex-basis: auto;
     }
 

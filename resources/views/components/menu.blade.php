@@ -71,6 +71,14 @@
                     <p class="search-empty">Empieza a escribir para buscar...</p>
                 </div>
             </div>
+
+            <template id="searchActionSendIconTemplate">
+                <x-heroicon-o-paper-airplane class="search-result-action-icon" />
+            </template>
+
+            <template id="searchActionReceiveIconTemplate">
+                <x-heroicon-o-arrow-down-left class="search-result-action-icon" />
+            </template>
         </div>
     @endif
 </div>

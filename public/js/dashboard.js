@@ -4,8 +4,6 @@
     }
 
     const logoutButton = document.getElementById('logoutButton');
-    const openSendModalButton = byId('openSendModal');
-    const openReceiveModalButton = byId('openReceiveModal');
     const sendModal = byId('sendModal');
     const receiveModal = byId('receiveModal');
     const sendMoneyForm = byId('sendMoneyForm');
@@ -140,22 +138,6 @@
         if (requestTargetIdInput) {
             requestTargetIdInput.value = '';
         }
-    });
-
-    openSendModalButton?.addEventListener('click', () => {
-        if (!sendModal) {
-            console.error('sendModal no encontrado');
-            return;
-        }
-        openModal(sendModal);
-    });
-
-    openReceiveModalButton?.addEventListener('click', () => {
-        if (!receiveModal) {
-            console.error('receiveModal no encontrado');
-            return;
-        }
-        openModal(receiveModal);
     });
 
     document.querySelectorAll('[data-close-modal]').forEach((button) => {
