@@ -22,7 +22,17 @@
         <div class="login-container">
             <p>Escanea este QR con tu app de autenticación</p>
             <img class="two-factor-qr" src="{{ $qrUrl }}">
-            <p class="two-factor-secret">Secret: {{ $secret }}</p>
+            <div class="two-factor-secret-wrapper">
+                <div class="two-factor-secret-line">
+                    <span class="two-factor-secret-label">Secret:</span>
+                    <div id="twoFactorSecretBlock" class="two-factor-secret-block is-hidden" role="button" tabindex="0" aria-label="Mostrar u ocultar secret" aria-pressed="false">
+                        <span class="two-factor-secret-value">{{ $secret }}</span>
+                        <span class="two-factor-secret-eye" aria-hidden="true">
+                            <x-heroicon-o-eye class="two-factor-secret-eye-icon" />
+                        </span>
+                    </div>
+                </div>
+            </div>
 
             <div class="input-container">
                 <input type="text" name="two_factor_code" id="two_factor_code" placeholder=" " maxlength="6" inputmode="numeric">

@@ -2,6 +2,11 @@
     height: 42px;
 }
 
+#searchUserButton .menu-search-icon {
+    width: 20px;
+    height: 20px;
+}
+
 .search-panel {
     position: absolute;
     top: 0;
