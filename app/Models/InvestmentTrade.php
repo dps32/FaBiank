@@ -23,11 +23,11 @@ class InvestmentTrade extends Model
         'date',
     ];
 
-    // date se lee como fecha.
+    // date se lee como fecha y hora.
     protected function casts(): array
     {
         return [
-            'date' => 'date',
+            'date' => 'datetime',
         ];
     }
 

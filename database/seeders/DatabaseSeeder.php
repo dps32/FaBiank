@@ -121,7 +121,7 @@ class DatabaseSeeder extends Seeder
                     'type' => 'buy',
                 ],
                 [
-                    'date' => now()->toDateString(),
+                    'date' => now('UTC'),
                 ]
             );
         }
