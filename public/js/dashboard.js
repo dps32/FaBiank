@@ -1,8 +1,10 @@
 (() => {
+    // Funcion auxiliar para obtener elementos por ID
     function byId(id) {
         return document.getElementById(id);
     }
 
+    // Elementos del DOM
     const logoutButton = document.getElementById('logoutButton');
     const sendModal = byId('sendModal');
     const receiveModal = byId('receiveModal');
@@ -24,6 +26,7 @@
     const logoutUrl = logoutButton?.dataset.logoutUrl ?? '';
     const loginUrl = logoutButton?.dataset.loginUrl ?? '/login';
 
+    // Formatear cantidad a formato moneda
     function formatMoney(amount) {
         return Number(amount || 0).toLocaleString('en-US', {
             minimumFractionDigits: 2,
@@ -31,6 +34,7 @@
         });
     }
 
+    // Actualizar saldo en la UI
     function updateBalance(newBalance) {
         if (!balanceValueElement || typeof newBalance === 'undefined' || newBalance === null) {
             return;
@@ -39,6 +43,7 @@
         balanceValueElement.textContent = `$${formatMoney(newBalance)}`;
     }
 
+    // Asegurar que existe el contenedor de transacciones
     function ensureTransactionsList() {
         if (!transactionsCard) {
             return null;
@@ -62,20 +67,24 @@
             return;
         }
 
+        // Eliminar mensaje de "no hay transacciones" si existe
         const empty = byId('transactionsEmpty');
         if (empty) {
             empty.remove();
         }
 
+        // Crear fila invisible inicialmente paradar paso a la animacion
         const row = document.createElement('div');
         row.className = 'row-item';
         row.style.opacity = '0';
         row.style.transform = 'translateY(10px)';
         row.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
 
+        // Nombre del usuario
         const userNode = document.createElement('p');
         userNode.textContent = (counterparty || 'Usuario').trim() || 'Usuario';
 
+        // Cantidad con signo + o -
         const amountNode = document.createElement('p');
         amountNode.className = `amount ${incoming ? 'is-positive' : 'is-negative'}`;
         amountNode.textContent = `${incoming ? '+' : '-'} $${formatMoney(amount)}`;
@@ -84,17 +93,20 @@
         row.appendChild(amountNode);
         list.prepend(row);
 
+        // Animar aparicion despues de inserted
         setTimeout(function() {
             row.style.opacity = '1';
             row.style.transform = 'translateY(0)';
         }, 10);
 
+        // Mantener solo 5 transacciones visibles
         const rows = list.querySelectorAll('.row-item');
         if (rows.length > 5) {
             rows[rows.length - 1].remove();
         }
     }
 
+    // Eliminar fila de solicitud de pago
     function removePaymentRequestRow(requestId) {
         if (!paymentRequestsCard) {
             return;
@@ -105,6 +117,7 @@
             row.remove();
         }
 
+        // Mostrar mensaje si no quedan solicitudes
         const remaining = paymentRequestsCard.querySelectorAll('.request-row');
         if (remaining.length === 0 && !byId('paymentRequestsEmpty')) {
             const empty = document.createElement('p');
@@ -115,6 +128,7 @@
         }
     }
 
+    // Abrir modal
     function openModal(modal) {
         if (!modal) {
             return;
@@ -123,11 +137,13 @@
         modal.classList.add('is-open');
     }
 
+    // Cerrar modal
     function closeModal(modal) {
         if (!modal) {
             return;
         }
 
+        // Quitar foco del elemento activo
         if (document.activeElement && modal.contains(document.activeElement)) {
             document.activeElement.blur();
         }
@@ -135,6 +151,7 @@
         modal.classList.remove('is-open');
     }
 
+    // Limpiar ID al cambiar nombre de usuario
     recipientUsernameInput?.addEventListener('input', () => {
         if (recipientIdInput) {
             recipientIdInput.value = '';
@@ -147,6 +164,7 @@
         }
     });
 
+    // Botones para cerrar modales
     document.querySelectorAll('[data-close-modal]').forEach((button) => {
         button.addEventListener('click', () => {
             const modalId = button.getAttribute('data-close-modal');
@@ -154,6 +172,7 @@
         });
     });
 
+    // Cerrar modal al hacer click fuera (en el fondo)
     [sendModal, receiveModal].forEach((modal) => {
         modal?.addEventListener('click', (event) => {
             if (event.target === modal) {
@@ -162,6 +181,7 @@
         });
     });
 
+    // Cerrar modales con tecla Escape
     document.addEventListener('keydown', (event) => {
         if (event.key !== 'Escape') {
             return;
@@ -171,6 +191,7 @@
         closeModal(receiveModal);
     });
 
+    // Cerrar sesion
     logoutButton?.addEventListener('click', async () => {
         if (!logoutUrl) {
             return;
@@ -196,21 +217,24 @@
         }
     });
 
-    // Manejo del formulario de envío de dinero
+    // Formulario de enviar dinero
     sendMoneyForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        // Obtener datos del formulario
         const recipientId = recipientIdInput?.value;
         const recipientUsername = recipientUsernameInput?.value?.trim() ?? '';
         const amount = byId('transferAmount')?.value;
         const numericAmount = parseFloat(amount);
 
+        // Validar campos obligatorios
         if ((!recipientId && !recipientUsername) || !amount) {
             showSendError('Por favor completa todos los campos.');
             return;
         }
 
         try {
+            // Enviar peticion al servidor
             const response = await fetch('/api/transactions', {
                 method: 'POST',
                 headers: {
@@ -227,6 +251,7 @@
 
             const data = await response.json();
 
+            // Mostrar error si la respuesta no es exitosa
             if (!response.ok) {
                 showSendError(data.message || 'Error al enviar dinero.');
                 return;
@@ -244,20 +269,24 @@
         }
     });
 
+    // Formulario de solicitar dinero
     requestPaymentForm?.addEventListener('submit', async (e) => {
         e.preventDefault();
 
+        // Obtener datos del formulario
         const targetId = requestTargetIdInput?.value;
         const targetUsername = requestTargetUsernameInput?.value?.trim() ?? '';
         const amount = byId('requestAmount')?.value;
         const numericAmount = parseFloat(amount);
 
+        // Validar campos obligatorios
         if ((!targetId && !targetUsername) || !amount) {
             showReceiveError('Por favor completa todos los campos.');
             return;
         }
 
         try {
+            // Enviar peticion al servidor
             const response = await fetch('/api/payment-requests', {
                 method: 'POST',
                 headers: {
@@ -274,6 +303,7 @@
 
             const data = await response.json();
 
+            // Mostrar error si la respuesta no es exitosa
             if (!response.ok) {
                 showReceiveError(data.message || 'Error al crear la solicitud.');
                 return;
