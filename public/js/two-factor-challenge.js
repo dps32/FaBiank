@@ -34,6 +34,10 @@
         codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 6);
     });
 
+    codeInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') verifyButton.click();
+    });
+
     verifyButton.addEventListener('click', async () => {
         clearError();
 

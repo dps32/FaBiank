@@ -130,7 +130,6 @@
         const sendModal = document.getElementById('sendModal');
         if (sendModal) {
             sendModal.classList.add('is-open');
-            sendModal.setAttribute('aria-hidden', 'false');
 
             const amountField = document.getElementById('transferAmount');
             if (amountField) {
@@ -153,7 +152,6 @@
         const receiveModal = document.getElementById('receiveModal');
         if (receiveModal) {
             receiveModal.classList.add('is-open');
-            receiveModal.setAttribute('aria-hidden', 'false');
 
             const amountField = document.getElementById('requestAmount');
             if (amountField) {

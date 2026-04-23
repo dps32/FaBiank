@@ -25,9 +25,9 @@
             <div class="two-factor-secret-wrapper">
                 <div class="two-factor-secret-line">
                     <span class="two-factor-secret-label">Secret:</span>
-                    <div id="twoFactorSecretBlock" class="two-factor-secret-block is-hidden" role="button" tabindex="0" aria-label="Mostrar u ocultar secret" aria-pressed="false">
+                    <div id="twoFactorSecretBlock" class="two-factor-secret-block is-hidden" tabindex="0">
                         <span class="two-factor-secret-value">{{ $secret }}</span>
-                        <span class="two-factor-secret-eye" aria-hidden="true">
+                        <span class="two-factor-secret-eye">
                             <x-heroicon-o-eye class="two-factor-secret-eye-icon" />
                         </span>
                     </div>

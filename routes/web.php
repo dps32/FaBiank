@@ -55,6 +55,11 @@ Route::get('/investments', function(){
     return view('investments');
 })->middleware('auth')->name('investments');
 
+// API: Dashboard state (for polling)
+Route::get('/api/dashboard-state', [DashboardController::class, 'state'])
+    ->middleware('auth')
+    ->name('api.dashboard-state');
+
 // API: Search users
 Route::get('/api/search-users', [SearchUserController::class, 'search'])
     ->middleware('auth')

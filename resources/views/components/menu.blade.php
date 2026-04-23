@@ -36,7 +36,7 @@
 @endphp
 
 <div class="nav-wrapper">
-    <nav class="menu" aria-label="Menu principal">
+    <nav class="menu">
         <div class="menu-links">
             @foreach ($items as $item)
                 <a
@@ -51,18 +51,17 @@
 
     @if (auth()->check())
         <div class="search-menu-button-container">
-            <button id="searchUserButton" type="button" class="menu-search-button" aria-label="Buscar usuarios" title="Buscar usuario" aria-expanded="false" aria-controls="searchPanel">
+            <button id="searchUserButton" type="button" class="menu-search-button" title="Buscar usuario">
                 <x-heroicon-o-magnifying-glass class="menu-search-icon" />
             </button>
 
-            <div id="searchPanel" class="search-panel" aria-hidden="true">
+            <div id="searchPanel" class="search-panel">
                 <div class="search-input-wrapper">
                     <input
                         type="text"
                         id="searchInput"
                         class="search-input"
                         placeholder="Buscar usuario..."
-                        aria-label="Buscar usuario"
                         autocomplete="off"
                     >
                 </div>
@@ -86,3 +85,5 @@
 @if (auth()->check())
     <x-search-users />
 @endif
+
+<script src="{{ asset('js/navigation.js') }}" defer></script>

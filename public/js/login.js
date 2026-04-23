@@ -28,6 +28,10 @@
         errorMessage.classList.remove('show');
     };
 
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') loginButton.click();
+    });
+
     loginButton.addEventListener('click', async () => {
         clearError();
 

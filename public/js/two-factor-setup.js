@@ -35,6 +35,10 @@
         codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 6);
     });
 
+    codeInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') setupButton.click();
+    });
+
     if (secretBlock) {
         let pointerDownAt = 0;
         let pointerDownX = 0;
@@ -44,7 +48,6 @@
         const toggleSecretVisibility = () => {
             const isHidden = secretBlock.classList.contains('is-hidden');
             secretBlock.classList.toggle('is-hidden', !isHidden);
-            secretBlock.setAttribute('aria-pressed', String(isHidden));
         };
 
         secretBlock.addEventListener('mousedown', (event) => {

@@ -23,7 +23,42 @@
 }
 
 @view-transition {
-  navigation: auto;
+    navigation: auto;
+}
+
+::view-transition-image-pair(root) {
+    background: #c6c6c6;
+}
+
+::view-transition-old(root) {
+    animation: 220ms ease both vt-fade-out;
+}
+
+::view-transition-new(root) {
+    animation: 300ms ease both vt-fade-in;
+}
+
+@keyframes vt-fade-out {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+@keyframes vt-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+#nav-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.85);
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    border-radius: 0 2px 2px 0;
 }
 
 * {

@@ -108,8 +108,8 @@
         </section>
 
 
-        <div id="sendModal" class="modal" aria-hidden="true">
-            <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="sendModalTitle">
+        <div id="sendModal" class="modal">
+            <div class="modal-panel">
                 <div class="modal-header">
                     <h3 id="sendModalTitle">Enviar dinero</h3>
                     <button type="button" class="modal-close" data-close-modal="sendModal">Cerrar</button>
@@ -147,8 +147,8 @@
             </div>
         </div>
 
-        <div id="receiveModal" class="modal" aria-hidden="true">
-            <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="receiveModalTitle">
+        <div id="receiveModal" class="modal">
+            <div class="modal-panel">
                 <div class="modal-header">
                     <h3 id="receiveModalTitle">Solicitar pago</h3>
                     <button type="button" class="modal-close" data-close-modal="receiveModal">Cerrar</button>

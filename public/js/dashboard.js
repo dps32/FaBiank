@@ -113,7 +113,6 @@
         }
 
         modal.classList.add('is-open');
-        modal.setAttribute('aria-hidden', 'false');
     }
 
     function closeModal(modal) {
@@ -126,7 +125,6 @@
         }
 
         modal.classList.remove('is-open');
-        modal.setAttribute('aria-hidden', 'true');
     }
 
     recipientUsernameInput?.addEventListener('input', () => {
@@ -373,4 +371,134 @@
             paymentRequestErrorElement.classList.remove('show');
         }
     }
+
+    // --- Live polling ---
+
+    function getRenderedRequestIds() {
+        return new Set(
+            [...document.querySelectorAll('.request-row[data-request-id]')]
+                .map((el) => String(el.dataset.requestId))
+        );
+    }
+
+    function buildRequestRow(item) {
+        const row = document.createElement('div');
+        row.className = 'row-item request-row';
+        row.dataset.requestId = item.id;
+
+        const left = document.createElement('div');
+        const name = document.createElement('p');
+        name.textContent = item.requester;
+        const date = document.createElement('small');
+        date.textContent = item.date;
+        left.appendChild(name);
+        left.appendChild(date);
+
+        const right = document.createElement('div');
+        right.className = 'right request-actions-wrap';
+
+        const amountEl = document.createElement('p');
+        amountEl.className = 'amount is-request';
+        amountEl.textContent = item.amountLabel;
+
+        const actions = document.createElement('div');
+        actions.className = 'request-actions';
+
+        const acceptBtn = document.createElement('button');
+        acceptBtn.type = 'button';
+        acceptBtn.className = 'request-btn is-accept';
+        acceptBtn.dataset.requestAction = 'accept';
+        acceptBtn.dataset.requestId = item.id;
+        acceptBtn.dataset.requestAmount = item.amount;
+        acceptBtn.dataset.requester = item.requester;
+        acceptBtn.textContent = 'Aceptar';
+
+        const rejectBtn = document.createElement('button');
+        rejectBtn.type = 'button';
+        rejectBtn.className = 'request-btn is-reject';
+        rejectBtn.dataset.requestAction = 'reject';
+        rejectBtn.dataset.requestId = item.id;
+        rejectBtn.textContent = 'Rechazar';
+
+        actions.appendChild(acceptBtn);
+        actions.appendChild(rejectBtn);
+        right.appendChild(amountEl);
+        right.appendChild(actions);
+        row.appendChild(left);
+        row.appendChild(right);
+
+        return row;
+    }
+
+    function syncPaymentRequests(items) {
+        if (!paymentRequestsCard) return;
+
+        const renderedIds = getRenderedRequestIds();
+        const serverIds = new Set(items.map((r) => String(r.id)));
+
+        // Insertar solicitudes nuevas que aún no están en el DOM
+        const newItems = items.filter((r) => !renderedIds.has(String(r.id)));
+        if (newItems.length > 0) {
+            let list = byId('paymentRequestsList');
+            const empty = byId('paymentRequestsEmpty');
+            if (empty) empty.remove();
+
+            if (!list) {
+                list = document.createElement('div');
+                list.id = 'paymentRequestsList';
+                list.className = 'list-stack';
+                paymentRequestsCard.appendChild(list);
+            }
+
+            newItems.forEach((item) => list.prepend(buildRequestRow(item)));
+        }
+
+        // Eliminar filas que el servidor ya no devuelve (gestionadas por otro usuario)
+        renderedIds.forEach((id) => {
+            if (!serverIds.has(id)) {
+                const row = paymentRequestsCard.querySelector(`.request-row[data-request-id="${id}"]`);
+                if (row) row.remove();
+            }
+        });
+
+        // Si la lista quedó vacía, mostrar estado vacío
+        const remaining = paymentRequestsCard.querySelectorAll('.request-row');
+        if (remaining.length === 0 && !byId('paymentRequestsEmpty')) {
+            const empty = document.createElement('p');
+            empty.id = 'paymentRequestsEmpty';
+            empty.className = 'empty-state';
+            empty.textContent = 'No tienes solicitudes pendientes.';
+            paymentRequestsCard.appendChild(empty);
+        }
+    }
+
+    async function pollDashboardState() {
+        try {
+            const response = await fetch('/api/dashboard-state', {
+                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+            });
+            if (!response.ok) return;
+
+            const data = await response.json();
+            updateBalance(data.balance);
+            syncPaymentRequests(data.paymentRequestItems);
+        } catch {
+            // Silenciar errores de red — el usuario no necesita verlos
+        }
+    }
+
+    // Consulta inmediata al cargar y al volver a la pestaña
+    pollDashboardState();
+
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+            pollDashboardState();
+        }
+    });
+
+    setInterval(() => {
+        if (!document.hidden) {
+            pollDashboardState();
+        }
+    }, 5_000);
 })();

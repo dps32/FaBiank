@@ -24,7 +24,7 @@
                         <div class="history-list">
                             @foreach ($section['items'] as $item)
                                 <article class="history-item">
-                                    <div class="history-item-dot" aria-hidden="true"></div>
+                                    <div class="history-item-dot"></div>
 
                                     <div class="history-item-main">
                                         <p class="history-item-title">{{ $item['movementLabel'] }}</p>
