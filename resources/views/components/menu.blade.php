@@ -85,5 +85,3 @@
 @if (auth()->check())
     <x-search-users />
 @endif
-
-<script src="{{ asset('js/navigation.js') }}" defer></script>
