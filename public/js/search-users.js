@@ -120,12 +120,12 @@
         closeSearchPanel();
 
         const recipientIdField = document.getElementById('recipientId');
-        const recipientUsernameField = document.getElementById('recipientUsername');
+        const recipientUsernameSpan = document.getElementById('recipientUsername');
+        const recipientUsernameHidden = document.getElementById('recipientUsernameHidden');
 
-        if (recipientIdField && recipientUsernameField) {
-            recipientIdField.value = userId;
-            recipientUsernameField.value = userName || '';
-        }
+        if (recipientIdField) recipientIdField.value = userId;
+        if (recipientUsernameSpan) recipientUsernameSpan.textContent = userName || '';
+        if (recipientUsernameHidden) recipientUsernameHidden.value = userName || '';
 
         const sendModal = document.getElementById('sendModal');
         if (sendModal) {
@@ -142,12 +142,12 @@
         closeSearchPanel();
 
         const requestTargetIdField = document.getElementById('requestTargetId');
-        const requestTargetUsernameField = document.getElementById('requestTargetUsername');
+        const requestTargetUsernameSpan = document.getElementById('requestTargetUsername');
+        const requestTargetUsernameHidden = document.getElementById('requestTargetUsernameHidden');
 
-        if (requestTargetIdField && requestTargetUsernameField) {
-            requestTargetIdField.value = userId;
-            requestTargetUsernameField.value = userName || '';
-        }
+        if (requestTargetIdField) requestTargetIdField.value = userId;
+        if (requestTargetUsernameSpan) requestTargetUsernameSpan.textContent = userName || '';
+        if (requestTargetUsernameHidden) requestTargetUsernameHidden.value = userName || '';
 
         const receiveModal = document.getElementById('receiveModal');
         if (receiveModal) {

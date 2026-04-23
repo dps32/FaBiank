@@ -117,15 +117,9 @@
 
                 <form id="sendMoneyForm" class="send-form">
                     <div class="form-group">
-                        <label for="recipientUsername">Usuario destinatario</label>
-                        <input
-                            type="text"
-                            id="recipientUsername"
-                            name="recipientUsername"
-                            placeholder="Nombre del usuario"
-                            required
-                        >
+                        <p class="modal-recipient-label">Destinatario: <span id="recipientUsername"></span></p>
                         <input type="hidden" id="recipientId" name="recipientId" value="">
+                        <input type="hidden" id="recipientUsernameHidden" name="recipientUsername" value="">
                     </div>
 
                     <div class="form-group">
@@ -156,15 +150,9 @@
 
                 <form id="requestPaymentForm" class="receive-form">
                     <div class="form-group">
-                        <label for="requestTargetUsername">Usuario destinatario</label>
-                        <input
-                            type="text"
-                            id="requestTargetUsername"
-                            name="targetUsername"
-                            placeholder="Nombre del usuario"
-                            required
-                        >
+                        <p class="modal-recipient-label">Destinatario: <span id="requestTargetUsername"></span></p>
                         <input type="hidden" id="requestTargetId" name="targetId" value="">
+                        <input type="hidden" id="requestTargetUsernameHidden" name="targetUsername" value="">
                     </div>
 
                     <div class="form-group">

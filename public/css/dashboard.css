@@ -337,6 +337,13 @@
     gap: 6px;
 }
 
+.modal-recipient-label {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1f1f1f;
+}
+
 .form-group label {
     margin: 0;
     font-size: 14px;
