@@ -20,11 +20,21 @@ class DashboardController extends Controller
     {
         $data = $this->dashboardService->build($request->user());
 
-        return view('dashboard', $data);
+        $response = view('dashboard', $data);
+        $response->withHeaders([
+            'Cache-Control' => 'private, max-age=30',
+            'ETag' => '"' . md5(json_encode($data)) . '"',
+        ]);
+
+        return $response;
     }
 
     public function state(Request $request): JsonResponse
     {
-        return response()->json($this->dashboardService->build($request->user()));
+        return response()
+            ->json($this->dashboardService->build($request->user()))
+            ->withHeaders([
+                'Cache-Control' => 'private, max-age=30',
+            ]);
     }
 }

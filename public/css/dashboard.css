@@ -41,6 +41,14 @@
     border: 1px solid #ffffff7a;
     box-shadow: 0 10px 24px 0 rgba(0, 0, 0, 0.1);
     padding: 20px 24px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.card.loaded {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .card-label {
@@ -53,6 +61,33 @@
     flex: 1 1 0;
     min-width: 260px;
     min-height: 162px;
+    transition-delay: 0.1s;
+}
+
+.transactions-card {
+    grid-area: transactions;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    transition-delay: 0.2s;
+}
+
+.payment-requests-card {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    grid-column: 1;
+    transition-delay: 0.3s;
+}
+
+.investments-card {
+    grid-area: investments;
+    width: 390px;
+    max-width: 390px;
+    min-height: clamp(420px, 52vh, 560px);
+    display: flex;
+    flex-direction: column;
+    transition-delay: 0.4s;
 }
 
 .modal {
@@ -183,6 +218,14 @@
     border-radius: 14px;
     border: 1px solid rgba(0, 0, 0, 0.24);
     background: rgba(255, 255, 255, 0.2);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.row-item.loaded {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .row-item p,

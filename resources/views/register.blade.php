@@ -42,6 +42,14 @@
             <p>¿Ya tienes cuenta? <a href="{{ route("login") }}">Iniciar Sesión</a></p>
         </div>
     </div>
-    <script src="{{ asset('js/register.js') }}" defer></script>
+    <script>
+window.addEventListener('load', function() {
+    var container = document.querySelector('.register-container');
+    if (container) {
+        container.classList.add('loaded');
+    }
+});
+</script>
+<script src="{{ asset('js/register.js') }}" defer></script>
 </body>
 </html>

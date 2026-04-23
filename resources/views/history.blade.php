@@ -17,13 +17,13 @@
     <div class="history-wrap">
         <article class="history-card">
             @if ($historySections->isNotEmpty())
-                @foreach ($historySections as $section)
+                @foreach ($historySections as $sectionIndex => $section)
                     <section class="history-section">
                         <h2 class="history-section-title">{{ $section['label'] }}</h2>
 
                         <div class="history-list">
-                            @foreach ($section['items'] as $item)
-                                <article class="history-item">
+                            @foreach ($section['items'] as $itemIndex => $item)
+                                <article class="history-item" style="transition-delay: {{ 0.2 + ($sectionIndex * 0.1) + ($itemIndex * 0.04) }}s">
                                     <div class="history-item-dot"></div>
 
                                     <div class="history-item-main">
@@ -48,6 +48,23 @@
     </div>
 
     <button id="logoutButton" type="button" data-logout-url="{{ route('logout') }}" data-login-url="{{ route('login') }}" style="display: none;">Deslogearse</button>
+
+    <script>
+    window.addEventListener('load', function() {
+        var historyCard = document.querySelector('.history-card');
+        if (historyCard) {
+            setTimeout(function() {
+                historyCard.classList.add('loaded');
+            }, 100);
+        }
+        document.querySelectorAll('.history-item').forEach(function(item, index) {
+            setTimeout(function() {
+                item.classList.add('loaded');
+            }, 200 + (index * 40));
+        });
+    });
+    </script>
+
     <script src="{{ asset('js/history.js') }}" defer></script>
 </body>
 </html>

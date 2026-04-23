@@ -36,12 +36,13 @@
 @endphp
 
 <div class="nav-wrapper">
-    <nav class="menu">
+    <nav id="mainMenu" class="menu">
         <div class="menu-links">
-            @foreach ($items as $item)
+            @foreach ($items as $index => $item)
                 <a
                     href="{{ $item['href'] }}"
                     class="menu-link{{ $item['active'] ? ' is-active' : '' }}"
+                    style="transition-delay: {{ 0.05 + ($index * 0.03) }}s"
                 >
                     {{ $item['label'] }}
                 </a>
@@ -81,6 +82,22 @@
         </div>
     @endif
 </div>
+
+<script>
+(function() {
+    window.addEventListener('load', function() {
+        var menu = document.getElementById('mainMenu');
+        if (menu) {
+            menu.classList.add('loaded');
+        }
+
+        var searchButton = document.getElementById('searchUserButton');
+        if (searchButton) {
+            searchButton.classList.add('loaded');
+        }
+    });
+})();
+</script>
 
 @if (auth()->check())
     <x-search-users />

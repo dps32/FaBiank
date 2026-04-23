@@ -13,12 +13,21 @@
 <body>
     <x-menu />
 
-    <div class="content">
+    <div class="content investments-content">
         <h1>Inversiones</h1>
         <p>Has iniciado sesion correctamente.</p>
 
         <button id="logoutButton" type="button" data-logout-url="{{ route('logout') }}" data-login-url="{{ route('login') }}">Deslogearse</button>
     </div>
+
+    <script>
+    window.addEventListener('load', function() {
+        var content = document.querySelector('.investments-content');
+        if (content) {
+            content.classList.add('loaded');
+        }
+    });
+    </script>
 
     <script src="{{ asset('js/dashboard.js') }}" defer></script>
 </body>

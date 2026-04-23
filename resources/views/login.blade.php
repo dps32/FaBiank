@@ -35,6 +35,14 @@
             <p>¿No tienes cuenta? <a href="{{ route("register") }}">Registrarse</a></p>
         </div>
     </div>
-    <script src="{{ asset('js/login.js') }}" defer></script>
+    <script>
+window.addEventListener('load', function() {
+    var container = document.querySelector('.login-container');
+    if (container) {
+        container.classList.add('loaded');
+    }
+});
+</script>
+<script src="{{ asset('js/login.js') }}" defer></script>
 </body>
 </html>

@@ -1,5 +1,13 @@
 #searchUserButton {
     height: 42px;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+#searchUserButton.loaded {
+    opacity: 1;
+    transform: translateX(0);
 }
 
 #searchUserButton .menu-search-icon {
@@ -22,9 +30,14 @@
     padding: 0;
     opacity: 0;
     pointer-events: none;
-    transition: 0.4s ease;
+    transition: opacity 0.4s ease, width 0.4s ease;
     z-index: 120;
     overflow: visible;
+}
+
+.search-panel.loaded {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .search-panel.is-open {
@@ -92,7 +105,7 @@
     transform: translateY(-6px);
     pointer-events: none;
     scrollbar-width: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .search-results.show {

@@ -69,6 +69,9 @@
 
         const row = document.createElement('div');
         row.className = 'row-item';
+        row.style.opacity = '0';
+        row.style.transform = 'translateY(10px)';
+        row.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
 
         const userNode = document.createElement('p');
         userNode.textContent = (counterparty || 'Usuario').trim() || 'Usuario';
@@ -80,6 +83,11 @@
         row.appendChild(userNode);
         row.appendChild(amountNode);
         list.prepend(row);
+
+        setTimeout(function() {
+            row.style.opacity = '1';
+            row.style.transform = 'translateY(0)';
+        }, 10);
 
         const rows = list.querySelectorAll('.row-item');
         if (rows.length > 5) {
@@ -229,7 +237,7 @@
             hideSendError();
             closeModal(sendModal);
             updateBalance(data.newBalance);
-            prependTransaction(recipientUsername, numericAmount, false);
+            prependTransaction(data.recipientName || recipientUsername, numericAmount, false);
         } catch (error) {
             console.error('Error en transacción:', error);
             showSendError('Error de conexión al enviar dinero.');
@@ -373,6 +381,7 @@
     }
 
     // --- Live polling ---
+    let isPolling = false;
 
     function getRenderedRequestIds() {
         return new Set(
@@ -385,6 +394,9 @@
         const row = document.createElement('div');
         row.className = 'row-item request-row';
         row.dataset.requestId = item.id;
+        row.style.opacity = '0';
+        row.style.transform = 'translateY(10px)';
+        row.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
 
         const left = document.createElement('div');
         const name = document.createElement('p');
@@ -450,7 +462,14 @@
                 paymentRequestsCard.appendChild(list);
             }
 
-            newItems.forEach((item) => list.prepend(buildRequestRow(item)));
+            newItems.forEach((item) => {
+            const newRow = buildRequestRow(item);
+            list.prepend(newRow);
+            setTimeout(function() {
+                newRow.style.opacity = '1';
+                newRow.style.transform = 'translateY(0)';
+            }, 10);
+        });
         }
 
         // Eliminar filas que el servidor ya no devuelve (gestionadas por otro usuario)
@@ -473,6 +492,9 @@
     }
 
     async function pollDashboardState() {
+        if (isPolling) return;
+        isPolling = true;
+
         try {
             const response = await fetch('/api/dashboard-state', {
                 headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
@@ -484,21 +506,11 @@
             syncPaymentRequests(data.paymentRequestItems);
         } catch {
             // Silenciar errores de red — el usuario no necesita verlos
+        } finally {
+            isPolling = false;
         }
     }
 
-    // Consulta inmediata al cargar y al volver a la pestaña
+    // Solo ejecutar una vez al cargar
     pollDashboardState();
-
-    document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) {
-            pollDashboardState();
-        }
-    });
-
-    setInterval(() => {
-        if (!document.hidden) {
-            pollDashboardState();
-        }
-    }, 5_000);
 })();

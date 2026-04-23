@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\DashboardService;
 use App\Services\TransactionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class PaymentRequestController extends Controller
 {
-    public function __construct(private TransactionService $transactionService)
-    {
+    public function __construct(
+        private TransactionService $transactionService,
+        private DashboardService $dashboardService
+    ) {
     }
 
     public function store(Request $request): JsonResponse
@@ -48,6 +51,8 @@ class PaymentRequestController extends Controller
                 (float) $validated['requestAmount']
             );
 
+            $this->dashboardService->invalidate($target);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Solicitud de pago creada.',
@@ -81,6 +86,12 @@ class PaymentRequestController extends Controller
             );
 
             $target->refresh();
+
+            $this->dashboardService->invalidate($target);
+            $requester = User::find($result['paymentRequest']->requester_id);
+            if ($requester) {
+                $this->dashboardService->invalidate($requester);
+            }
 
             return response()->json([
                 'success' => true,

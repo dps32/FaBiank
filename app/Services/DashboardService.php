@@ -4,22 +4,34 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class DashboardService
 {
+    private const CACHE_TTL = 60;
+
     public function build(User $user): array
     {
-        $recentTransactions = $this->getRecentTransactions($user);
-        $receivedPaymentRequests = $this->getReceivedPaymentRequests($user);
-        $recentInvestments = $this->getRecentInvestments($user);
+        $cacheKey = "dashboard:user:{$user->id}";
 
-        return [
-            'balance' => (float) $user->balance,
-            'transactionItems' => $recentTransactions,
-            'paymentRequestItems' => $receivedPaymentRequests,
-            'investmentItems' => $recentInvestments,
-        ];
+        return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($user) {
+            $recentTransactions = $this->getRecentTransactions($user);
+            $receivedPaymentRequests = $this->getReceivedPaymentRequests($user);
+            $recentInvestments = $this->getRecentInvestments($user);
+
+            return [
+                'balance' => (float) $user->balance,
+                'transactionItems' => $recentTransactions,
+                'paymentRequestItems' => $receivedPaymentRequests,
+                'investmentItems' => $recentInvestments,
+            ];
+        });
+    }
+
+    public function invalidate(User $user): void
+    {
+        Cache::forget("dashboard:user:{$user->id}");
     }
 
     private function getRecentTransactions(User $user): Collection

@@ -14,17 +14,17 @@
 <body>
     <x-menu />
 
-    <div class="content">
+    <div class="content dashboard-content">
         <section class="dashboard-grid">
             <div class="dashboard-left">
                 <div class="dashboard-top">
-                    <article class="card balance-card">
+                    <article id="balanceCard" class="card balance-card" style="transition-delay: 0.1s">
                         <p class="card-label">Saldo disponible</p>
                         <p id="balanceValue" class="balance-value">${{ number_format($balance, 2) }}</p>
                     </article>
                 </div>
 
-                <article id="transactionsCard" class="card transactions-card">
+                <article id="transactionsCard" class="card transactions-card" style="transition-delay: 0.2s">
                     <div class="card-title-row">
                         <h2>Últimas transacciones</h2>
                         <a href="{{ route('history') }}">Ver todas</a>
@@ -32,8 +32,8 @@
 
                     @if ($transactionItems->isNotEmpty())
                         <div id="transactionsList" class="list-stack">
-                            @foreach ($transactionItems as $item)
-                                <div class="row-item">
+                            @foreach ($transactionItems as $index => $item)
+                                <div class="row-item" style="transition-delay: {{ 0.25 + ($index * 0.05) }}s">
                                     <p>{{ $item['counterparty'] }}</p>
                                     <p class="amount {{ $item['amountClass'] }}">
                                         {{ $item['signedAmount'] }}
@@ -46,7 +46,7 @@
                     @endif
                 </article>
 
-                <article id="paymentRequestsCard" class="card payment-requests-card">
+                <article id="paymentRequestsCard" class="card payment-requests-card" style="transition-delay: 0.3s">
                     <div class="card-title-row">
                         <h2>Solicitudes recibidas</h2>
                     </div>
@@ -54,8 +54,8 @@
 
                     @if ($paymentRequestItems->isNotEmpty())
                         <div id="paymentRequestsList" class="list-stack">
-                            @foreach ($paymentRequestItems as $item)
-                                <div class="row-item request-row" data-request-id="{{ $item['id'] }}">
+                            @foreach ($paymentRequestItems as $index => $item)
+                                <div class="row-item request-row" data-request-id="{{ $item['id'] }}" style="transition-delay: {{ 0.35 + ($index * 0.05) }}s">
                                     <div>
                                         <p>{{ $item['requester'] }}</p>
                                         <small>{{ $item['date'] }}</small>
@@ -76,7 +76,7 @@
                 </article>
             </div>
 
-            <article class="card investments-card">
+            <article id="investmentsCard" class="card investments-card" style="transition-delay: 0.4s">
                 <div class="card-title-row">
                     <h2>Resumen inversiones</h2>
                     <a href="{{ route('investments') }}">Ver todas</a>
@@ -84,8 +84,8 @@
 
                 @if ($investmentItems->isNotEmpty())
                     <div class="list-stack">
-                        @foreach ($investmentItems as $item)
-                            <div class="row-item">
+                        @foreach ($investmentItems as $index => $item)
+                            <div class="row-item" style="transition-delay: {{ 0.45 + ($index * 0.05) }}s">
                                 <div>
                                     <p>{{ $item['name'] }}</p>
                                     <small>${{ number_format($item['buyPrice'], 2) }} compra</small>
@@ -176,6 +176,17 @@
     </div>
 
     <button id="logoutButton" type="button" data-logout-url="{{ route('logout') }}" data-login-url="{{ route('login') }}" style="display: none;">Deslogearse</button>
+
+    <script>
+    window.addEventListener('load', function() {
+        document.querySelectorAll('.card').forEach(function(card) {
+            card.classList.add('loaded');
+        });
+        document.querySelectorAll('.row-item').forEach(function(row) {
+            row.classList.add('loaded');
+        });
+    });
+    </script>
 
     <script src="{{ asset('js/dashboard.js') }}" defer></script>
 </body>

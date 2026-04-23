@@ -12,6 +12,16 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+    <script>
+        window.scrollTo = function() {};
+        window.requestAnimationFrame = window.requestAnimationFrame || function(cb) { setTimeout(cb, 16); };
+        if (document.startViewTransition) {
+            document.startViewTransition = function(cb) {
+                cb();
+                return { finished: Promise.resolve(), ready: Promise.resolve(), skipCallback: function() {} };
+            };
+        }
+    </script>
 </head>
 <body>
     <x-menu />
@@ -32,6 +42,14 @@
         </div>
     </div>
 
+    <script>
+window.addEventListener('load', function() {
+    var container = document.querySelector('.login-container');
+    if (container) {
+        container.classList.add('loaded');
+    }
+});
+</script>
     <script src="{{ asset('js/two-factor-challenge.js') }}" defer></script>
 </body>
 </html>

@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Services\DashboardService;
 use App\Services\TransactionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-    public function __construct(private TransactionService $transactionService)
-    {
+    public function __construct(
+        private TransactionService $transactionService,
+        private DashboardService $dashboardService
+    ) {
     }
 
     public function store(Request $request): JsonResponse
@@ -31,11 +35,11 @@ class TransactionController extends Controller
             $recipient = null;
 
             if (!empty($validated['recipientId'])) {
-                $recipient = \App\Models\User::find($validated['recipientId']);
+                $recipient = User::find($validated['recipientId']);
             }
 
             if (!$recipient && !empty($validated['recipientUsername'])) {
-                $recipient = \App\Models\User::query()
+                $recipient = User::query()
                     ->where('username', $validated['recipientUsername'])
                     ->first();
             }
@@ -52,11 +56,17 @@ class TransactionController extends Controller
             $transaction = $this->transactionService->transfer($sender, $recipient, $amount);
             $sender->refresh();
 
+            $this->dashboardService->invalidate($sender);
+            if ($recipient instanceof User) {
+                $this->dashboardService->invalidate($recipient);
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => 'Dinero enviado correctamente.',
                 'transaction' => $transaction,
                 'newBalance' => (float) $sender->balance,
+                'recipientName' => $recipient instanceof User ? $recipient->name : $recipientUsername,
             ]);
         } catch (\InvalidArgumentException $e) {
             return response()->json([
