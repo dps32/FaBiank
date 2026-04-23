@@ -2,7 +2,6 @@
     const $ = (id) => document.getElementById(id);
     const setupButton = $('twoFactorSetupButton');
     const codeInput = $('two_factor_code');
-    const secretBlock = $('twoFactorSecretBlock');
     const errorMessage = document.querySelector('.error-message');
 
     if (!setupButton || !codeInput) {
@@ -34,62 +33,6 @@
     codeInput.addEventListener('input', () => {
         codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 6);
     });
-
-    codeInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') setupButton.click();
-    });
-
-    if (secretBlock) {
-        let pointerDownAt = 0;
-        let pointerDownX = 0;
-        let pointerDownY = 0;
-        let clickToggleTimer = null;
-
-        const toggleSecretVisibility = () => {
-            const isHidden = secretBlock.classList.contains('is-hidden');
-            secretBlock.classList.toggle('is-hidden', !isHidden);
-        };
-
-        secretBlock.addEventListener('mousedown', (event) => {
-            pointerDownAt = Date.now();
-            pointerDownX = event.clientX;
-            pointerDownY = event.clientY;
-        });
-
-        secretBlock.addEventListener('click', (event) => {
-            const pressDuration = Date.now() - pointerDownAt;
-            const movedDistance = Math.hypot(event.clientX - pointerDownX, event.clientY - pointerDownY);
-            const selection = window.getSelection();
-            const hasSelection = Boolean(selection && selection.toString().trim().length > 0);
-
-            if (pressDuration > 220 || movedDistance > 6 || hasSelection) {
-                return;
-            }
-
-            if (clickToggleTimer) {
-                clearTimeout(clickToggleTimer);
-            }
-
-            clickToggleTimer = window.setTimeout(() => {
-                toggleSecretVisibility();
-                clickToggleTimer = null;
-            }, 230);
-        });
-
-        secretBlock.addEventListener('dblclick', () => {
-            if (clickToggleTimer) {
-                clearTimeout(clickToggleTimer);
-                clickToggleTimer = null;
-            }
-        });
-
-        secretBlock.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                toggleSecretVisibility();
-            }
-        });
-    }
 
     setupButton.addEventListener('click', async () => {
         clearError();

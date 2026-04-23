@@ -27,9 +27,6 @@
                     <span class="two-factor-secret-label">Secret:</span>
                     <div id="twoFactorSecretBlock" class="two-factor-secret-block is-hidden" tabindex="0">
                         <span class="two-factor-secret-value">{{ $secret }}</span>
-                        <span class="two-factor-secret-eye">
-                            <x-heroicon-o-eye class="two-factor-secret-eye-icon" />
-                        </span>
                     </div>
                 </div>
             </div>
