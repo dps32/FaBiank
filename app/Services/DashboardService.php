@@ -114,7 +114,7 @@ class DashboardService
                     'id' => (int) $paymentRequest->id,
                     'requester' => $requester ?: 'Usuario',
                     'amount' => (float) $paymentRequest->amount,
-                    'amountLabel' => '$' . number_format((float) $paymentRequest->amount, 2),
+                    'amountLabel' => '- $' . number_format((float) $paymentRequest->amount, 2),
                     'date' => $paymentRequest->date ? (string) \Carbon\Carbon::parse($paymentRequest->date)->format('Y-m-d') : '-',
                 ];
             });

@@ -248,6 +248,10 @@
     color: #5b5b5b;
 }
 
+.is-request {
+    color: #ea0707;
+}
+
 #logoutButton {
     width: min(300px, 92vw);
     margin: 20px auto 0;

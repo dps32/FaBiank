@@ -20,25 +20,20 @@ Route::get('/', function () {
     return redirect('/login');
 })->name('home');
 
-// Register
-Route::get('/register', function () {
-    return view('register');
-})->name('register');
+// Register / Login — solo para usuarios no autenticados
+Route::middleware('guest')->group(function () {
+    Route::get('/register', fn() => view('register'))->name('register');
+    Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
 
-Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
-
-// Login
-Route::get('/login', function () {
-    return view('login');
-})->name('login');
-
-Route::post('/login', [LoginController::class, 'store'])->name('login.store');
+    Route::get('/login', fn() => view('login'))->name('login');
+    Route::post('/login', [LoginController::class, 'store'])->name('login.store')->middleware('throttle:5,1');
+});
 
 // Two factor
 Route::get('/2fa/setup', [TwoFactorController::class, 'setupCreate'])->name('two-factor.setup.show');
 Route::post('/2fa/setup', [TwoFactorController::class, 'setupStore'])->name('two-factor.setup.store');
 Route::get('/2fa/challenge', [TwoFactorController::class, 'challengeCreate'])->name('two-factor.challenge.show');
-Route::post('/2fa/challenge', [TwoFactorController::class, 'challengeStore'])->name('two-factor.challenge.store');
+Route::post('/2fa/challenge', [TwoFactorController::class, 'challengeStore'])->name('two-factor.challenge.store')->middleware('throttle:5,1');
 
 // Logout
 Route::post('/logout', [LoginController::class, 'destroy'])

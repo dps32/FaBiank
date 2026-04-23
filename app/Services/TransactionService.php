@@ -30,24 +30,19 @@ class TransactionService
             throw new \InvalidArgumentException('No puedes enviar dinero a ti mismo.');
         }
 
-        // Crear transacción
-        $transaction = Transaction::create([
-            'sender_id' => $sender->id,
-            'receiver_id' => $recipient->id,
-            'amount' => $amount,
-            'date' => now('UTC'),
-        ]);
+        return DB::transaction(function () use ($sender, $recipient, $amount) {
+            $transaction = Transaction::create([
+                'sender_id' => $sender->id,
+                'receiver_id' => $recipient->id,
+                'amount' => $amount,
+                'date' => now('UTC'),
+            ]);
 
-        // Actualizar balances
-        $sender->update([
-            'balance' => $senderBalance - $amount,
-        ]);
+            $sender->decrement('balance', $amount);
+            $recipient->increment('balance', $amount);
 
-        $recipient->update([
-            'balance' => ((float) $recipient->balance) + $amount,
-        ]);
-
-        return $transaction;
+            return $transaction;
+        });
     }
 
     // Crea transacción y valida datos.

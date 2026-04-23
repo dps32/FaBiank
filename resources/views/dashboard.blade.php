@@ -50,6 +50,7 @@
                     <div class="card-title-row">
                         <h2>Solicitudes recibidas</h2>
                     </div>
+                    <p id="paymentRequestError" class="form-error"></p>
 
                     @if ($paymentRequestItems->isNotEmpty())
                         <div id="paymentRequestsList" class="list-stack">
@@ -60,7 +61,7 @@
                                         <small>{{ $item['date'] }}</small>
                                     </div>
                                     <div class="right request-actions-wrap">
-                                        <p class="amount">{{ $item['amountLabel'] }}</p>
+                                        <p class="amount is-request">{{ $item['amountLabel'] }}</p>
                                         <div class="request-actions">
                                             <button type="button" class="request-btn is-accept" data-request-action="accept" data-request-id="{{ $item['id'] }}" data-request-amount="{{ $item['amount'] }}" data-requester="{{ $item['requester'] }}">Aceptar</button>
                                             <button type="button" class="request-btn is-reject" data-request-action="reject" data-request-id="{{ $item['id'] }}">Rechazar</button>

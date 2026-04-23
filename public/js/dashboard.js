@@ -14,6 +14,7 @@
     const requestTargetIdInput = byId('requestTargetId');
     const sendErrorElement = byId('sendError');
     const receiveErrorElement = byId('receiveError');
+    const paymentRequestErrorElement = byId('paymentRequestError');
     const balanceValueElement = byId('balanceValue');
     const transactionsCard = byId('transactionsCard');
     const paymentRequestsCard = byId('paymentRequestsCard');
@@ -312,12 +313,13 @@
             const data = await response.json();
 
             if (!response.ok) {
-                showSendError(data.message || 'No se pudo procesar la solicitud.');
+                showPaymentRequestError(data.message || 'No se pudo procesar la solicitud.');
                 button.disabled = false;
                 return;
             }
 
             removePaymentRequestRow(requestId);
+            hidePaymentRequestError();
 
             if (action === 'accept') {
                 updateBalance(data.newBalance);
@@ -325,7 +327,7 @@
             }
         } catch (error) {
             console.error('Error al responder solicitud:', error);
-            showSendError('Error de conexión al responder solicitud.');
+            showPaymentRequestError('Error de conexión al responder solicitud.');
             button.disabled = false;
         }
     });
@@ -355,6 +357,20 @@
         if (receiveErrorElement) {
             receiveErrorElement.textContent = '';
             receiveErrorElement.classList.remove('show');
+        }
+    }
+
+    function showPaymentRequestError(message) {
+        if (paymentRequestErrorElement) {
+            paymentRequestErrorElement.textContent = message;
+            paymentRequestErrorElement.classList.add('show');
+        }
+    }
+
+    function hidePaymentRequestError() {
+        if (paymentRequestErrorElement) {
+            paymentRequestErrorElement.textContent = '';
+            paymentRequestErrorElement.classList.remove('show');
         }
     }
 })();

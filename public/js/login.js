@@ -36,20 +36,12 @@
             password: $('password')?.value ?? '',
         };
 
-        console.log('[LOGIN] Inicio de login');
-        console.log('[LOGIN] Payload', {
-            username: payload.username,
-            password_length: payload.password.length,
-        });
-
         if (!payload.username || !payload.password) {
-            console.error('[LOGIN] Faltan usuario o contraseña');
             setError('Introduce usuario y contraseña.');
             return;
         }
 
         if (!loginUrl) {
-            console.error('[LOGIN] URL de login no configurada');
             setError('No se ha configurado la URL de login.');
             return;
         }
@@ -67,30 +59,22 @@
                 body: JSON.stringify(payload),
             });
 
-            console.log('[LOGIN] HTTP status', response.status);
-
             const raw = await response.text();
             let data = {};
 
             try {
                 data = raw ? JSON.parse(raw) : {};
             } catch {
-                console.error('[LOGIN] Respuesta no JSON', raw);
                 return;
             }
 
-            console.log('[LOGIN] Respuesta del servidor', data);
-
             if (!response.ok) {
-                console.error('[LOGIN] Credenciales invalidas o error', data);
                 setError(data?.message ?? 'Credenciales incorrectas.');
                 return;
             }
 
-            console.log('[LOGIN] Login correcto');
             window.location.assign(data.redirect ?? dashboardUrl);
         } catch (error) {
-            console.error('[LOGIN] Error de red o parseo', error);
             setError('No se pudo iniciar sesion. Intentalo de nuevo.');
         } finally {
             loginButton.disabled = false;
