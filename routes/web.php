@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\InvestmentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PaymentRequestController;
 use App\Http\Controllers\RegisterController;
@@ -51,9 +52,9 @@ Route::get('/history', [HistoryController::class, 'show'])
     ->name('history');
 
 // Investments
-Route::get('/investments', function(){
-    return view('investments');
-})->middleware('auth')->name('investments');
+Route::get('/investments', [InvestmentController::class, 'show'])
+    ->middleware('auth')
+    ->name('investments');
 
 // API: Dashboard state (for polling)
 Route::get('/api/dashboard-state', [DashboardController::class, 'state'])
@@ -79,5 +80,20 @@ Route::post('/api/payment-requests', [PaymentRequestController::class, 'store'])
 Route::post('/api/payment-requests/{paymentRequestId}/respond', [PaymentRequestController::class, 'respond'])
     ->middleware('auth')
     ->name('api.payment-requests.respond');
+
+// API: Investment — stock prices
+Route::get('/api/investments/prices', [InvestmentController::class, 'prices'])
+    ->middleware('auth')
+    ->name('api.investments.prices');
+
+// API: Investment — buy
+Route::post('/api/investments/buy', [InvestmentController::class, 'buy'])
+    ->middleware('auth')
+    ->name('api.investments.buy');
+
+// API: Investment — sell
+Route::post('/api/investments/{investmentId}/sell', [InvestmentController::class, 'sell'])
+    ->middleware('auth')
+    ->name('api.investments.sell');
 
 

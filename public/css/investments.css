@@ -1,0 +1,210 @@
+.investments-content {
+    padding-bottom: 40px;
+}
+
+.inv-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 22px;
+    margin-bottom: 4px;
+}
+
+.inv-title {
+    margin: 0 0 4px;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.inv-subtitle {
+    margin: 0;
+    font-size: 14px;
+    color: #444;
+    font-weight: 500;
+}
+
+.inv-subtitle span {
+    font-weight: 700;
+    color: #1f1f1f;
+}
+
+/* Gráfica TradingView */
+.inv-chart-wrap {
+    width: 100%;
+    height: 480px;
+    margin-top: 18px;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 30px;
+}
+
+/* Grid principal: left column + history sidebar */
+.inv-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 20px;
+    width: 100%;
+    margin-top: 18px;
+    align-items: start;
+}
+
+.inv-left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.inv-card {
+    width: 100%;
+}
+
+.inv-history-card {
+    position: sticky;
+    top: 24px;
+}
+
+/* Fila de stock en el mercado */
+.stock-ticker {
+    margin: 0;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.stock-name {
+    color: #555;
+}
+
+.stock-price {
+    margin: 0 0 2px;
+    font-weight: 700;
+    font-size: 18px;
+    color: #1f1f1f;
+}
+
+.stock-change {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.stock-row {
+    cursor: pointer;
+    transition: background 0.2s ease, opacity 0.4s ease, transform 0.4s ease;
+}
+
+.stock-row:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.stock-row.is-chart-active {
+    background: rgba(255, 255, 255, 0.35);
+    border-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Botones comprar / vender */
+.inv-buy-btn,
+.inv-sell-btn {
+    all: unset;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    transition: 0.2s ease;
+    white-space: nowrap;
+}
+
+.inv-buy-btn {
+    color: #0f7a1f;
+    background: rgba(16, 174, 66, 0.14);
+}
+
+.inv-sell-btn {
+    color: #c93c3c;
+    background: rgba(199, 60, 60, 0.12);
+    margin-top: 6px;
+}
+
+.inv-buy-btn:hover,
+.inv-sell-btn:hover {
+    transform: translateY(-1px);
+}
+
+.inv-buy-btn:disabled,
+.inv-sell-btn:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Botón actualizar precios */
+.inv-refresh-btn {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    background: rgba(255, 255, 255, 0.2);
+    transition: 0.2s ease;
+    color: #333;
+}
+
+.inv-refresh-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: translateY(-1px);
+}
+
+.inv-refresh-btn:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Portafolio */
+.portfolio-value {
+    font-size: 20px;
+    margin: 0 0 2px;
+}
+
+/* Modal extras */
+.inv-modal-price {
+    font-size: 13px;
+    color: #555;
+    font-weight: 400;
+}
+
+.inv-total-label {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.inv-total-label strong {
+    font-size: 18px;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+    .inv-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .inv-history-card {
+        position: static;
+    }
+}
+
+@media (max-width: 600px) {
+    .inv-title {
+        font-size: 26px;
+    }
+
+    .stock-price {
+        font-size: 15px;
+    }
+}

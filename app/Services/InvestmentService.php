@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\Investment;
 use App\Models\InvestmentTrade;
 use App\Models\Stock;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class InvestmentService
@@ -35,6 +37,79 @@ class InvestmentService
     public function deleteStockById(int $id): bool
     {
         return (bool) Stock::query()->whereKey($id)->delete();
+    }
+
+    // Compra acciones: descuenta balance, crea inversión y registra trade.
+    public function buyStock(User $user, Stock $stock, int $quantity): Investment
+    {
+        if ($quantity <= 0) {
+            throw new \InvalidArgumentException('La cantidad debe ser mayor a 0.');
+        }
+
+        $price = (float) $stock->current_price;
+        $total = $price * $quantity;
+
+        if ((float) $user->balance < $total) {
+            throw new \InvalidArgumentException('Saldo insuficiente para realizar la compra.');
+        }
+
+        return DB::transaction(function () use ($user, $stock, $quantity, $price, $total) {
+            $user->decrement('balance', $total);
+
+            $investment = Investment::create([
+                'user_id'   => $user->id,
+                'stock_id'  => $stock->id,
+                'quantity'  => $quantity,
+                'buy_price' => $price,
+                'is_sold'   => false,
+            ]);
+
+            InvestmentTrade::create([
+                'investment_id' => $investment->id,
+                'type'          => 'buy',
+                'date'          => now('UTC'),
+            ]);
+
+            return $investment;
+        });
+    }
+
+    // Vende una inversión activa: acredita balance y registra trade.
+    public function sellInvestment(User $user, Investment $investment): Investment
+    {
+        if ($investment->user_id !== $user->id) {
+            throw new \InvalidArgumentException('Esta inversión no te pertenece.');
+        }
+
+        if ($investment->is_sold) {
+            throw new \InvalidArgumentException('Esta inversión ya fue vendida.');
+        }
+
+        $currentPrice = (float) $investment->stock->current_price;
+        $proceeds = $currentPrice * $investment->quantity;
+
+        return DB::transaction(function () use ($user, $investment, $currentPrice, $proceeds) {
+            $investment->lockForUpdate();
+
+            if ($investment->is_sold) {
+                throw new \InvalidArgumentException('Esta inversión ya fue vendida.');
+            }
+
+            $user->increment('balance', $proceeds);
+
+            $investment->update([
+                'sell_price' => $currentPrice,
+                'is_sold'    => true,
+            ]);
+
+            InvestmentTrade::create([
+                'investment_id' => $investment->id,
+                'type'          => 'sell',
+                'date'          => now('UTC'),
+            ]);
+
+            return $investment->fresh();
+        });
     }
 
     // Crea inversión y valida datos.
