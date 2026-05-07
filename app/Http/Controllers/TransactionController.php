@@ -54,6 +54,7 @@ class TransactionController extends Controller
             $amount = (float) $validated['transferAmount'];
 
             $transaction = $this->transactionService->transfer($sender, $recipient, $amount);
+            DashboardService::forgetForUserIds([$sender->id, $recipient->id]);
             $sender->refresh();
 
             $this->dashboardService->invalidate($sender);

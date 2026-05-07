@@ -175,7 +175,17 @@
         </div>
     </div>
 
-    <button id="logoutButton" type="button" data-logout-url="{{ route('logout') }}" data-login-url="{{ route('login') }}" style="display: none;">Deslogearse</button>
+    <button
+        id="logoutButton"
+        type="button"
+        data-logout-url="{{ route('logout') }}"
+        data-login-url="{{ route('login') }}"
+        data-dashboard-state-url="{{ route('api.dashboard-state') }}"
+        data-transactions-url="{{ route('api.transactions.store') }}"
+        data-payment-requests-url="{{ route('api.payment-requests.store') }}"
+        data-payment-request-respond-url-template="{{ route('api.payment-requests.respond', ['paymentRequestId' => '__ID__']) }}"
+        style="display: none;"
+    >Deslogearse</button>
 
     <script>
     window.addEventListener('load', function() {

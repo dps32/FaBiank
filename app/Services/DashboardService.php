@@ -3,35 +3,58 @@
 namespace App\Services;
 
 use App\Models\User;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class DashboardService
 {
-    private const CACHE_TTL = 60;
+    private const CACHE_TTL_SECONDS = 10;
 
     public function build(User $user): array
     {
-        $cacheKey = "dashboard:user:{$user->id}";
+        $user->refresh();
 
-        return Cache::remember($cacheKey, self::CACHE_TTL, function () use ($user) {
-            $recentTransactions = $this->getRecentTransactions($user);
-            $receivedPaymentRequests = $this->getReceivedPaymentRequests($user);
-            $recentInvestments = $this->getRecentInvestments($user);
+        return Cache::remember(
+            self::cacheKey($user->id),
+            now()->addSeconds(self::CACHE_TTL_SECONDS),
+            function () use ($user): array {
+                $recentTransactions = $this->getRecentTransactions($user);
+                $receivedPaymentRequests = $this->getReceivedPaymentRequests($user);
+                $recentInvestments = $this->getRecentInvestments($user);
 
-            return [
-                'balance' => (float) $user->balance,
-                'transactionItems' => $recentTransactions,
-                'paymentRequestItems' => $receivedPaymentRequests,
-                'investmentItems' => $recentInvestments,
-            ];
-        });
+                return [
+                    'balance' => (float) $user->balance,
+                    'transactionItems' => $recentTransactions,
+                    'paymentRequestItems' => $receivedPaymentRequests,
+                    'investmentItems' => $recentInvestments,
+                ];
+            }
+        );
     }
 
     public function invalidate(User $user): void
     {
-        Cache::forget("dashboard:user:{$user->id}");
+        self::forgetForUserId($user->id);
+    }
+
+    public static function forgetForUserId(int $userId): void
+    {
+        Cache::forget(self::cacheKey($userId));
+    }
+
+    public static function forgetForUserIds(array $userIds): void
+    {
+        foreach ($userIds as $userId) {
+            if (is_int($userId) || ctype_digit((string) $userId)) {
+                self::forgetForUserId((int) $userId);
+            }
+        }
+    }
+
+    private static function cacheKey(int $userId): string
+    {
+        return "dashboard:data:user:{$userId}";
     }
 
     private function getRecentTransactions(User $user): Collection

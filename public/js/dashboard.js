@@ -20,11 +20,16 @@
     const balanceValueElement = byId('balanceValue');
     const transactionsCard = byId('transactionsCard');
     const paymentRequestsCard = byId('paymentRequestsCard');
+    const isDashboardPage = Boolean(balanceValueElement || transactionsCard || paymentRequestsCard);
 
     const csrfMeta = document.querySelector('meta[name="csrf-token"]');
     const csrfToken = csrfMeta ? csrfMeta.content : '';
     const logoutUrl = logoutButton?.dataset.logoutUrl ?? '';
     const loginUrl = logoutButton?.dataset.loginUrl ?? '/login';
+    const dashboardStateUrl = logoutButton?.dataset.dashboardStateUrl ?? '/api/dashboard-state';
+    const transactionsUrl = logoutButton?.dataset.transactionsUrl ?? '/api/transactions';
+    const paymentRequestsUrl = logoutButton?.dataset.paymentRequestsUrl ?? '/api/payment-requests';
+    const paymentRequestRespondUrlTemplate = logoutButton?.dataset.paymentRequestRespondUrlTemplate ?? '/api/payment-requests/__ID__/respond';
 
     // Formatear cantidad a formato moneda
     function formatMoney(amount) {
@@ -234,8 +239,7 @@
         }
 
         try {
-            // Enviar peticion al servidor
-            const response = await fetch('/api/transactions', {
+            const response = await fetch(transactionsUrl, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -286,8 +290,7 @@
         }
 
         try {
-            // Enviar peticion al servidor
-            const response = await fetch('/api/payment-requests', {
+            const response = await fetch(paymentRequestsUrl, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -336,7 +339,8 @@
         button.disabled = true;
 
         try {
-            const response = await fetch(`/api/payment-requests/${requestId}/respond`, {
+            const respondUrl = paymentRequestRespondUrlTemplate.replace('__ID__', String(requestId));
+            const response = await fetch(respondUrl, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -526,7 +530,7 @@
         isPolling = true;
 
         try {
-            const response = await fetch('/api/dashboard-state', {
+            const response = await fetch(dashboardStateUrl, {
                 headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
             });
             if (!response.ok) return;
@@ -541,6 +545,19 @@
         }
     }
 
-    // Solo ejecutar una vez al cargar
-    pollDashboardState();
+    if (isDashboardPage) {
+        pollDashboardState();
+
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                pollDashboardState();
+            }
+        });
+
+        setInterval(() => {
+            if (!document.hidden) {
+                pollDashboardState();
+            }
+        }, 5_000);
+    }
 })();

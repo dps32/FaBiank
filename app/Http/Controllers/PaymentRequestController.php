@@ -50,6 +50,7 @@ class PaymentRequestController extends Controller
                 $target,
                 (float) $validated['requestAmount']
             );
+            DashboardService::forgetForUserIds([$requester->id, $target->id]);
 
             $this->dashboardService->invalidate($target);
 
@@ -84,6 +85,8 @@ class PaymentRequestController extends Controller
                 $paymentRequestId,
                 $validated['action']
             );
+            $requesterId = $result['paymentRequest']->requester_id ?? null;
+            DashboardService::forgetForUserIds([$target->id, $requesterId]);
 
             $target->refresh();
 
