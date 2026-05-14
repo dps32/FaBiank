@@ -79,9 +79,13 @@ class LoginController extends Controller
             'ip' => $request->ip(),
         ]);
 
-        return response()->json([
-            'message' => 'Logout correcto.',
-            'redirect' => route('login'),
-        ]);
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Logout correcto.',
+                'redirect' => route('login'),
+            ]);
+        }
+
+        return redirect()->route('login');
     }
 }

@@ -6,14 +6,20 @@
     const csrfMeta = document.querySelector('meta[name="csrf-token"]');
     const csrfToken = csrfMeta ? csrfMeta.content : '';
 
-    const balanceEl    = byId('balanceValue');
-    const buyModal     = byId('buyModal');
-    const sellModal    = byId('sellModal');
-    const buyForm      = byId('buyForm');
-    const sellForm     = byId('sellForm');
-    const buyErrorEl   = byId('buyError');
-    const sellErrorEl  = byId('sellError');
-    const refreshBtn   = byId('refreshPricesBtn');
+    const logoutBtn = byId('logoutButton');
+    const pricesUrl = logoutBtn?.dataset.pricesUrl ?? '/api/investments/prices';
+    const portfolioPricesUrl = logoutBtn?.dataset.portfolioPricesUrl ?? '/api/investments/portfolio-prices';
+    const buyUrl = logoutBtn?.dataset.buyUrl ?? '/api/investments/buy';
+    const sellUrlTemplate = logoutBtn?.dataset.sellUrlTemplate ?? '/api/investments/__ID__/sell';
+
+    const balanceEl = byId('balanceValue');
+    const buyModal = byId('buyModal');
+    const sellModal = byId('sellModal');
+    const buyForm = byId('buyForm');
+    const sellForm = byId('sellForm');
+    const buyErrorEl = byId('buyError');
+    const sellErrorEl = byId('sellError');
+    const refreshBtn = byId('refreshPricesBtn');
 
     // --- Helpers ---
 
@@ -22,6 +28,12 @@
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
         });
+    }
+
+    function signedMoney(amount) {
+        const value = Number(amount || 0);
+        const sign = value >= 0 ? '+' : '-';
+        return sign + '$' + formatMoney(Math.abs(value));
     }
 
     function updateBalance(newBalance) {
@@ -91,7 +103,7 @@
         currentBuyPrice = price;
 
         byId('buyStockId').value    = stockId;
-        byId('buyStockName').textContent = `${ticker} — ${name}`;
+        byId('buyStockName').textContent = `${ticker} â€” ${name}`;
         byId('buyStockPrice').textContent = formatMoney(price);
         byId('buyQuantity').value   = '';
         byId('buyTotal').textContent = '$0.00';
@@ -136,7 +148,7 @@
         const quantity = parseInt(byId('buyQuantity')?.value, 10);
 
         if (!stockId || !quantity || quantity < 1) {
-            showError(buyErrorEl, 'Introduce una cantidad válida.');
+            showError(buyErrorEl, 'Introduce una cantidad vÃ¡lida.');
             return;
         }
 
@@ -144,7 +156,7 @@
         submitBtn.disabled = true;
 
         try {
-            const res  = await fetch('/api/investments/buy', {
+            const res  = await fetch(buyUrl, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -165,7 +177,7 @@
             updateBalance(data.newBalance);
             addPortfolioRow(data.investment);
         } catch {
-            showError(buyErrorEl, 'Error de conexión al realizar la compra.');
+            showError(buyErrorEl, 'Error de conexiÃ³n al realizar la compra.');
         } finally {
             submitBtn.disabled = false;
         }
@@ -184,7 +196,7 @@
         submitBtn.disabled = true;
 
         try {
-            const res  = await fetch(`/api/investments/${invId}/sell`, {
+            const res  = await fetch(sellUrlTemplate.replace('__ID__', invId), {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -204,8 +216,9 @@
             closeModal(sellModal);
             updateBalance(data.newBalance);
             removePortfolioRow(invId);
+            addHistoryRow(data.investment);
         } catch {
-            showError(sellErrorEl, 'Error de conexión al realizar la venta.');
+            showError(sellErrorEl, 'Error de conexiÃ³n al realizar la venta.');
         } finally {
             submitBtn.disabled = false;
         }
@@ -232,17 +245,27 @@
         const changeSign  = inv.change_percent >= 0 ? '+' : '';
 
         const row = document.createElement('div');
-        row.className = 'row-item portfolio-row';
+        row.className = 'row-item portfolio-row investment-row';
         row.dataset.invId = inv.id;
+        row.dataset.buyPrice = inv.buy_price;
         row.style.cssText = 'opacity:0;transform:translateY(10px);transition:opacity 0.4s ease,transform 0.4s ease';
 
         row.innerHTML = `
-            <div>
-                <p class="stock-ticker">${inv.ticker}</p>
-                <small>${inv.quantity} acc · compra $${formatMoney(inv.buy_price)}</small>
+            <div class="investment-main">
+                <div>
+                    <p class="stock-ticker">${inv.ticker}</p>
+                    <small>${inv.name || 'Activo'}</small>
+                </div>
+                <div class="investment-meta">
+                    <span>${inv.quantity} acc</span>
+                    <span>Compra $${formatMoney(inv.buy_price)}</span>
+                    <span class="portfolio-current-price" data-inv-id="${inv.id}">Actual $${formatMoney(inv.current_price)}</span>
+                </div>
             </div>
-            <div class="right">
-                <p class="amount ${changeClass} portfolio-value" data-inv-id="${inv.id}">$${formatMoney(inv.position_value)}</p>
+            <div class="investment-money">
+                <span class="investment-label">Valor actual</span>
+                <p class="amount portfolio-value" data-inv-id="${inv.id}">$${formatMoney(inv.position_value)}</p>
+                <p class="investment-gain ${changeClass} portfolio-gain" data-inv-id="${inv.id}">${signedMoney(inv.gain_loss)}</p>
                 <small class="${changeClass} portfolio-change" data-inv-id="${inv.id}">${changeSign}${formatMoney(inv.change_percent)}%</small>
                 <button type="button" class="inv-sell-btn"
                     data-open-sell="${inv.id}"
@@ -251,7 +274,53 @@
                     data-current-price="${inv.current_price}">Vender</button>
             </div>
         `;
+        list.prepend(row);
+        setTimeout(() => {
+            row.style.opacity = '1';
+            row.style.transform = 'translateY(0)';
+        }, 10);
+    }
 
+    function addHistoryRow(inv) {
+        const historyCard = byId('historyCard');
+        if (!historyCard) return;
+
+        const empty = historyCard.querySelector('.empty-state');
+        if (empty) empty.remove();
+
+        let list = historyCard.querySelector('.list-stack');
+        if (!list) {
+            list = document.createElement('div');
+            list.className = 'list-stack';
+            historyCard.appendChild(list);
+        }
+
+        const changeClass = inv.change_percent >= 0 ? 'is-positive' : 'is-negative';
+        const changeSign  = inv.change_percent >= 0 ? '+' : '';
+
+        const row = document.createElement('div');
+        row.className = 'row-item investment-row history-investment-row';
+        row.style.cssText = 'opacity:0;transform:translateY(10px);transition:opacity 0.4s ease,transform 0.4s ease';
+
+        row.innerHTML = `
+            <div class="investment-main">
+                <div>
+                    <p class="stock-ticker">${inv.ticker}</p>
+                    <small>${inv.name || 'Activo'}</small>
+                </div>
+                <div class="investment-meta">
+                    <span>${inv.quantity} acc</span>
+                    <span>Compra $${formatMoney(inv.buy_price)}</span>
+                    <span>Venta $${formatMoney(inv.sell_price ?? 0)}</span>
+                </div>
+            </div>
+            <div class="investment-money">
+                <span class="investment-label">Ganancia / perdida</span>
+                <p class="amount ${changeClass}">${signedMoney(inv.gain_loss)}</p>
+                <small class="${changeClass}">${changeSign}${formatMoney(inv.change_percent)}%</small>
+                <span class="investment-total">Recibido $${formatMoney(inv.position_value)}</span>
+            </div>
+        `;
         list.prepend(row);
         setTimeout(() => {
             row.style.opacity = '1';
@@ -285,7 +354,7 @@
                 el.textContent = '$' + formatMoney(stock.current_price);
             });
 
-            // Actualizar variación del día
+            // Actualizar variaciÃ³n del dÃ­a
             const changeSign  = stock.change_pct >= 0 ? '+' : '';
             const changeClass = stock.change_pct >= 0 ? 'is-positive' : 'is-negative';
             const changeAbs   = Math.abs(stock.change ?? 0);
@@ -309,23 +378,34 @@
 
                 const valEl    = document.querySelector(`.portfolio-value[data-inv-id="${invId}"]`);
                 const pctEl    = document.querySelector(`.portfolio-change[data-inv-id="${invId}"]`);
+                const gainEl   = document.querySelector(`.portfolio-gain[data-inv-id="${invId}"]`);
+                const priceEl  = document.querySelector(`.portfolio-current-price[data-inv-id="${invId}"]`);
                 const row      = document.querySelector(`.portfolio-row[data-inv-id="${invId}"]`);
                 if (!valEl || !row) return;
 
-                const buyMatch = row.querySelector('small')?.textContent.match(/compra \$([0-9,.]+)/);
-                const buyPrice = buyMatch ? parseFloat(buyMatch[1].replace(/,/g, '')) : 0;
+                const buyPrice = parseFloat(row.dataset.buyPrice) || 0;
 
                 const posValue  = stock.current_price * qty;
+                const gainLoss  = posValue - (buyPrice * qty);
                 const pct       = buyPrice > 0 ? ((stock.current_price - buyPrice) / buyPrice) * 100 : 0;
                 const pctSign   = pct >= 0 ? '+' : '';
                 const pctClass  = pct >= 0 ? 'is-positive' : 'is-negative';
 
                 valEl.textContent = '$' + formatMoney(posValue);
-                valEl.className   = `amount ${pctClass} portfolio-value`;
+                valEl.className   = 'amount portfolio-value';
+
+                if (gainEl) {
+                    gainEl.textContent = signedMoney(gainLoss);
+                    gainEl.className = `investment-gain ${pctClass} portfolio-gain`;
+                }
 
                 if (pctEl) {
                     pctEl.textContent = `${pctSign}${formatMoney(pct)}%`;
                     pctEl.className   = `${pctClass} portfolio-change`;
+                }
+
+                if (priceEl) {
+                    priceEl.textContent = 'Actual $' + formatMoney(stock.current_price);
                 }
             });
         });
@@ -343,11 +423,6 @@
         // Vaciar el contenedor y recrearlo para forzar reinicio del widget
         wrap.innerHTML = `
             <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
-            <div class="tradingview-widget-copyright">
-                <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">
-                    <span class="blue-text">Track all markets on TradingView</span>
-                </a>
-            </div>
         `;
 
         const script = document.createElement('script');
@@ -382,15 +457,15 @@
         wrap.appendChild(script);
     }
 
-    // Cargar gráfica con el primer ticker al inicio
+    // Cargar grÃ¡fica con el primer ticker al inicio
     loadChart(currentChartTicker);
 
-    // Cambiar gráfica al hacer click en una fila del mercado
+    // Cambiar grÃ¡fica al hacer click en una fila del mercado
     document.addEventListener('click', (e) => {
         const row = e.target.closest('.stock-row');
         if (!row) return;
 
-        // No activar si el click fue en el botón comprar
+        // No activar si el click fue en el botÃ³n comprar
         if (e.target.closest('.inv-buy-btn')) return;
 
         const ticker = row.querySelector('.stock-ticker')?.textContent?.trim();
@@ -403,13 +478,13 @@
         }
     });
 
-    // --- Botón actualizar precios ---
+    // --- BotÃ³n actualizar precios ---
 
     refreshBtn?.addEventListener('click', async () => {
         refreshBtn.disabled = true;
 
         try {
-            const res  = await fetch('/api/investments/prices', {
+            const res  = await fetch(pricesUrl, {
                 headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
             });
 
@@ -418,9 +493,56 @@
             const data = await res.json();
             applyPriceUpdates(data.stocks ?? []);
         } catch {
-            // Silenciar errores de red
+            // silenciar errores de red
         } finally {
             refreshBtn.disabled = false;
         }
     });
+
+    // --- Polling automÃ¡tico de precios ---
+
+    // Portafolio: cada 2s directo desde Yahoo
+    let portfolioFetching = false;
+
+    async function pollPortfolioPrices() {
+        if (portfolioFetching || !document.querySelector('[data-open-sell]')) return;
+
+        portfolioFetching = true;
+        try {
+            const res = await fetch(portfolioPricesUrl, {
+                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+            });
+            if (!res.ok) return;
+            const data = await res.json();
+            applyPriceUpdates(data.stocks ?? []);
+        } catch {
+            // silenciar errores de red
+        } finally {
+            portfolioFetching = false;
+        }
+    }
+
+    // Mercado completo: cada 10s
+    let allPricesFetching = false;
+
+    async function pollAllPrices() {
+        if (allPricesFetching) return;
+
+        allPricesFetching = true;
+        try {
+            const res = await fetch(pricesUrl, {
+                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+            });
+            if (!res.ok) return;
+            const data = await res.json();
+            applyPriceUpdates(data.stocks ?? []);
+        } catch {
+            // silenciar errores de red
+        } finally {
+            allPricesFetching = false;
+        }
+    }
+
+    setInterval(pollPortfolioPrices, 2000);
+    setInterval(pollAllPrices, 10000);
 })();

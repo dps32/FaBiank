@@ -83,6 +83,15 @@
     @endif
 </div>
 
+@if (auth()->check())
+    <form method="POST" action="{{ route('logout') }}" class="floating-logout-form">
+        @csrf
+        <button type="submit" class="floating-logout-button">
+            Cerrar sesión
+        </button>
+    </form>
+@endif
+
 <script>
 (function() {
     window.addEventListener('load', function() {

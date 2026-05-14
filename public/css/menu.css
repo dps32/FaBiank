@@ -71,3 +71,48 @@
 .menu-link:active {
     transform: scale(0.97);
 }
+
+.floating-logout-form {
+    position: fixed;
+    top: 18px;
+    right: 24px;
+    z-index: 40;
+    margin: 0;
+}
+
+.floating-logout-button {
+    width: auto;
+    min-height: 42px;
+    padding: 10px 16px;
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.floating-logout-button:hover {
+    background: rgba(0, 0, 0, 0.72);
+    transform: translateY(-1px);
+}
+
+.floating-logout-button:active {
+    transform: scale(0.98);
+}
+
+@media (max-width: 720px) {
+    .floating-logout-form {
+        top: 74px;
+        right: 16px;
+    }
+
+    .floating-logout-button {
+        min-height: 38px;
+        padding: 9px 13px;
+        font-size: 12px;
+    }
+}

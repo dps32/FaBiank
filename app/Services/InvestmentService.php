@@ -54,7 +54,7 @@ class InvestmentService
         }
 
         return DB::transaction(function () use ($user, $stock, $quantity, $price, $total) {
-            $user->decrement('balance', $total);
+            $user->decrement('balance', $total, []);
 
             $investment = Investment::create([
                 'user_id'   => $user->id,
@@ -95,7 +95,7 @@ class InvestmentService
                 throw new \InvalidArgumentException('Esta inversión ya fue vendida.');
             }
 
-            $user->increment('balance', $proceeds);
+            $user->increment('balance', $proceeds, []);
 
             $investment->update([
                 'sell_price' => $currentPrice,

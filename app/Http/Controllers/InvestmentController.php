@@ -52,13 +52,45 @@ class InvestmentController extends Controller
         ]);
     }
 
-    // Devuelve precios actualizados para polling.
-    public function prices(): JsonResponse
+    // Devuelve precios actualizados para polling (todos los stocks).
+    public function prices(Request $request): JsonResponse
     {
+        $request->session()->save();
+
         $stocksRaw = $this->stockPriceService->refreshStockPrices();
 
         return response()->json([
             'stocks' => $this->enrichStocks($stocksRaw),
+        ]);
+    }
+
+    // Devuelve precios en tiempo real solo para los stocks del portafolio activo del usuario.
+    public function portfolioPrices(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $tickers = Investment::query()
+            ->with('stock')
+            ->where('user_id', $user->id)
+            ->where('is_sold', false)
+            ->get()
+            ->pluck('stock.ticker')
+            ->filter()
+            ->unique()
+            ->values()
+            ->toArray();
+
+        if (empty($tickers)) {
+            return response()->json(['stocks' => []]);
+        }
+
+        // Liberamos el lock de sesión antes de llamar a Yahoo para no bloquear otras requests.
+        $request->session()->save();
+
+        $stocks = $this->stockPriceService->refreshTickerPrices($tickers);
+
+        return response()->json([
+            'stocks' => $this->enrichStocks($stocks),
         ]);
     }
 
@@ -137,7 +169,9 @@ class InvestmentController extends Controller
         $currentPrice = (float) ($inv->stock->current_price ?? $buyPrice);
         $sellPrice    = $inv->sell_price !== null ? (float) $inv->sell_price : null;
         $evalPrice    = $inv->is_sold ? ($sellPrice ?? $buyPrice) : $currentPrice;
+        $costBasis = $buyPrice * $inv->quantity;
         $positionValue = $evalPrice * $inv->quantity;
+        $gainLoss = $positionValue - $costBasis;
         $changePercent = $buyPrice > 0 ? (($evalPrice - $buyPrice) / $buyPrice) * 100 : 0;
 
         return [
@@ -149,7 +183,9 @@ class InvestmentController extends Controller
             'buy_price'     => $buyPrice,
             'sell_price'    => $sellPrice,
             'current_price' => $currentPrice,
+            'cost_basis'    => $costBasis,
             'position_value'=> $positionValue,
+            'gain_loss'     => $gainLoss,
             'change_percent'=> $changePercent,
             'is_sold'       => (bool) $inv->is_sold,
         ];

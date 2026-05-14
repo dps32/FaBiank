@@ -86,6 +86,11 @@ Route::get('/api/investments/prices', [InvestmentController::class, 'prices'])
     ->middleware('auth')
     ->name('api.investments.prices');
 
+// API: Investment — stock prices (solo portafolio activo, tiempo real)
+Route::get('/api/investments/portfolio-prices', [InvestmentController::class, 'portfolioPrices'])
+    ->middleware('auth')
+    ->name('api.investments.portfolio-prices');
+
 // API: Investment — buy
 Route::post('/api/investments/buy', [InvestmentController::class, 'buy'])
     ->middleware('auth')

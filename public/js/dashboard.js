@@ -196,7 +196,6 @@
         closeModal(receiveModal);
     });
 
-    // Cerrar sesion
     logoutButton?.addEventListener('click', async () => {
         if (!logoutUrl) {
             return;
